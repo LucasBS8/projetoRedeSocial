@@ -1,4 +1,4 @@
-﻿@model Login
+﻿@model Usuario
 
 @{
     Layout = "_LayoutDeslogado";
@@ -6,20 +6,20 @@
 }
 
 <div class="pt-5  d-flex justify-content-center ">
-    <form asp-controller="Login" asp-action="Entrar" method="post" class="form p-5 radiusBorder bg-primary text-white w-50">
+    <form asp-controller="Usuario" asp-action="Entrar" method="post" class="form p-5 radiusBorder bg-primary text-white w-50">
         <h1 class="text-center">NexHub</h1>
         <h3 class="text-center">Login</h3>
         <div class="mb-3">
             <label class="form-label pt-3">Email</label>
-            <input asp-for="email" type="email" class="form-control" placeholder="nome@exemplo.com">
+            <input asp-for="usuarioEmail" type="email" class="form-control" placeholder="nome@exemplo.com">
             <label class="form-label pt-3">Senha</label>
-            <input asp-for="senha" type="password" class="form-control" placeholder="senha">
+            <input asp-for="usuarioSenha" type="password" class="form-control" placeholder="senha">
         </div>
         <div class="d-grid gap-2 text-center p-4  d-flex justify-content-center">
             <button type="submit" class="btn btn-primary w-75">Entrar</button>
         </div>
         <div class="d-grid gap text-center">
-            Não tem conta?<a href="~/Usuario/Cadastro" class="pl-2 text-info">Cadastrar</a>
+            Não tem conta?<a asp-controller="Usuario" asp-action="Cadastro" class="pl-2 text-info">Cadastrar</a>
         </div>
     </form>
 </div>

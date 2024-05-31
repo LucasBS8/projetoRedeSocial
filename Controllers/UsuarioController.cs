@@ -18,12 +18,33 @@ namespace projetoRedeSocial.Controllers
             _context = context;
         }
 
-        // GET: Login
-        public async Task<IActionResult> Login()
+        public ActionResult Login()
         {
-            return _context.usuario != null ?
-                        View(await _context.usuario.ToListAsync()) :
-                        Problem("Entity set 'Contexto.usuario'  is null.");
+            return View();
+        }
+
+        public ActionResult Cadastro()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Entrar(Usuario usuario)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    return RedirectToAction("Index", "Posts");
+                }
+
+                return View("Index");
+            }
+            catch (System.Exception ex)
+            {
+                TempData["Mensagem"] = "Erro: " + ex.Message;
+                return RedirectToAction("Index");
+            }
         }
 
         // GET: Usuario
