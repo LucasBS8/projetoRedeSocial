@@ -45,13 +45,13 @@ namespace projetoRedeSocial.Migrations
                         column: x => x.idUsuario,
                         principalTable: "usuario",
                         principalColumn: "usuarioId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_bloqueados_usuario_idUsuarioBloqueado",
                         column: x => x.idUsuarioBloqueado,
                         principalTable: "usuario",
                         principalColumn: "usuarioId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,7 +76,7 @@ namespace projetoRedeSocial.Migrations
                         column: x => x.usuarioId,
                         principalTable: "usuario",
                         principalColumn: "usuarioId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,13 +96,13 @@ namespace projetoRedeSocial.Migrations
                         column: x => x.idUsuario,
                         principalTable: "usuario",
                         principalColumn: "usuarioId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_seguidores_usuario_idUsuarioSeguidor",
                         column: x => x.idUsuarioSeguidor,
                         principalTable: "usuario",
                         principalColumn: "usuarioId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -124,13 +124,13 @@ namespace projetoRedeSocial.Migrations
                         column: x => x.postId,
                         principalTable: "post",
                         principalColumn: "postId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_comentarios_usuario_usuarioId",
                         column: x => x.usuarioId,
                         principalTable: "usuario",
                         principalColumn: "usuarioId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -150,13 +150,13 @@ namespace projetoRedeSocial.Migrations
                         column: x => x.idPost,
                         principalTable: "post",
                         principalColumn: "postId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_curtidas_usuario_idUsuario",
                         column: x => x.idUsuario,
                         principalTable: "usuario",
                         principalColumn: "usuarioId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

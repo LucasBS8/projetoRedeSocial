@@ -1,0 +1,54 @@
+﻿@model projetoRedeSocial.Models.Usuario
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Usuario</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.usuarioNome)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.usuarioNome)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.usuarioTelefone)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.usuarioTelefone)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.usuarioEmail)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.usuarioEmail)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.usuarioSenha)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.usuarioSenha)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.usuarioEndereco)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.usuarioEndereco)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.usuarioCPF)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.usuarioCPF)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.usuarioId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

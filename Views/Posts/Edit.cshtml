@@ -1,0 +1,64 @@
+﻿@model projetoRedeSocial.Models.Post
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Post</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="postId" />
+            <div class="form-group">
+                <label asp-for="usuarioId" class="control-label"></label>
+                <select asp-for="usuarioId" class="form-control" asp-items="ViewBag.usuarioId"></select>
+                <span asp-validation-for="usuarioId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="postTitulo" class="control-label"></label>
+                <input asp-for="postTitulo" class="form-control" />
+                <span asp-validation-for="postTitulo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="postDesc" class="control-label"></label>
+                <input asp-for="postDesc" class="form-control" />
+                <span asp-validation-for="postDesc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="postArquivo" class="control-label"></label>
+                <input asp-for="postArquivo" class="form-control" />
+                <span asp-validation-for="postArquivo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="postCor" class="control-label"></label>
+                <input asp-for="postCor" class="form-control" />
+                <span asp-validation-for="postCor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="postDate" class="control-label"></label>
+                <input asp-for="postDate" class="form-control" />
+                <span asp-validation-for="postDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="postStatus" class="control-label"></label>
+                <input asp-for="postStatus" class="form-control" />
+                <span asp-validation-for="postStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

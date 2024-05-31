@@ -16,3 +16,11 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.radiusBorder {
+    border-radius: 30px;
+}
+
+.blur{
+    filter:blur(4px)
+}

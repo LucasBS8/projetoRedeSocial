@@ -1,0 +1,41 @@
+﻿@model IEnumerable<projetoRedeSocial.Models.Seguidores>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.seguidoUsuario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.usuarioSeguidor)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.seguidoUsuario.usuarioId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.usuarioSeguidor.usuarioId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.idSeguidor">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.idSeguidor">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.idSeguidor">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

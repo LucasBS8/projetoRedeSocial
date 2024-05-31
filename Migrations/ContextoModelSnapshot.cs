@@ -220,13 +220,13 @@ namespace projetoRedeSocial.Migrations
                     b.HasOne("projetoRedeSocial.Models.Usuario", "bloqueioUsuario")
                         .WithMany()
                         .HasForeignKey("idUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("projetoRedeSocial.Models.Usuario", "bloqueadoUsuario")
                         .WithMany()
                         .HasForeignKey("idUsuarioBloqueado")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("bloqueadoUsuario");
@@ -239,13 +239,13 @@ namespace projetoRedeSocial.Migrations
                     b.HasOne("projetoRedeSocial.Models.Post", "postComentario")
                         .WithMany()
                         .HasForeignKey("postId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("projetoRedeSocial.Models.Usuario", "usuarioComentario")
                         .WithMany()
                         .HasForeignKey("usuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("postComentario");
@@ -258,13 +258,13 @@ namespace projetoRedeSocial.Migrations
                     b.HasOne("projetoRedeSocial.Models.Post", "postCurtida")
                         .WithMany()
                         .HasForeignKey("idPost")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("projetoRedeSocial.Models.Usuario", "curtidaUsuario")
                         .WithMany()
                         .HasForeignKey("idUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("curtidaUsuario");
@@ -277,7 +277,7 @@ namespace projetoRedeSocial.Migrations
                     b.HasOne("projetoRedeSocial.Models.Usuario", "usuarioPost")
                         .WithMany()
                         .HasForeignKey("usuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("usuarioPost");
@@ -288,13 +288,13 @@ namespace projetoRedeSocial.Migrations
                     b.HasOne("projetoRedeSocial.Models.Usuario", "seguidoUsuario")
                         .WithMany()
                         .HasForeignKey("idUsuario")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("projetoRedeSocial.Models.Usuario", "usuarioSeguidor")
                         .WithMany()
                         .HasForeignKey("idUsuarioSeguidor")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("seguidoUsuario");

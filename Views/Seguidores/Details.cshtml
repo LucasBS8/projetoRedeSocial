@@ -1,0 +1,30 @@
+﻿@model projetoRedeSocial.Models.Seguidores
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Seguidores</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.seguidoUsuario)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.seguidoUsuario.usuarioId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.usuarioSeguidor)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.usuarioSeguidor.usuarioId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.idSeguidor">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
