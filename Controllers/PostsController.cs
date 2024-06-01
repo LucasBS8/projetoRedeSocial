@@ -19,36 +19,36 @@ namespace projetoRedeSocial.Controllers
             _context = context;
         }
 
-        public ActionResult HomePost()
+        public async Task<IActionResult> HomePost()
         {
-            // Simulating data fetch, replace this with actual data fetch from database
-            var posts = new List<Post>
-            {
-                new Post { postId = 1, postTitulo = "Post 1", postDesc = "Descrição 1", postCor = "#ffcc00", postDate = "2023-06-01", postStatus = "Ativo" },
-                new Post { postId = 2, postArquivo = "imagem.jpeg", postCor = "#00ccff", postDate = "2023-06-02", postStatus = "Ativo" },
-                // Add more posts
-            };
+            /*            // Simulating data fetch, replace this with actual data fetch from database
+                        var posts = new List<Post>
+                        {
+                            new Post { postId = 1, postTitulo = "Post 1", postDesc = "Descrição 1", postCor = "#ffcc00", postDate = "2023-06-01", postStatus = "Ativo" },
+                            new Post { postId = 2, postArquivo = "imagem.jpeg", postCor = "#00ccff", postDate = "2023-06-02", postStatus = "Ativo" },
+                            // Add more posts
+                        };
 
-            var postViewModels = new List<Post>();
+                        var postViewModels = new List<Post>();
 
-            foreach (var post in posts)
-            {
+                        foreach (var post in posts)
+                        {
 
-                postViewModels.Add(new Post
-                {
+                            postViewModels.Add(new Post
+                            {
 
-                    postId = post.postId,
-                    usuarioPost = post.usuarioPost,
-                    postTitulo = post.postTitulo,
-                    postDesc = post.postDesc,
-                    postArquivo = post.postArquivo,
-                    postCor = post.postCor,
-                    postDate = post.postDate,
-                    postStatus = post.postStatus
-                });
-            }
-
-            return View(postViewModels);
+                                postId = post.postId,
+                                usuarioPost = post.usuarioPost,
+                                postTitulo = post.postTitulo,
+                                postDesc = post.postDesc,
+                                postArquivo = post.postArquivo,
+                                postCor = post.postCor,
+                                postDate = post.postDate,
+                                postStatus = post.postStatus
+                            });
+                        }*/
+            var contexto = _context.post.Include(p => p.usuarioPost);
+            return View(await contexto.ToListAsync());
         }
 
         // GET: Posts
@@ -105,7 +105,7 @@ namespace projetoRedeSocial.Controllers
                 post.usuarioId = int.Parse(HttpContext.Session.GetString("UserId"));
                 _context.Add(post);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(HomePost));
             }
             return View(post);
         }
