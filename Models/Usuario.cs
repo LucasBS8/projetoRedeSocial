@@ -9,6 +9,14 @@ namespace projetoRedeSocial.Models
         [Display(Name = "usuario ID")]
         public int usuarioId { get; set; }
 
+        [Column("usuarioImagem")]
+        [Display(Name = "Perfil")]
+        public string? usuarioImagem { get; set; }
+
+        [Column("usuarioDesc")]
+        [Display(Name = "Descrição")]
+        public string? usuarioDesc { get; set; }
+
         [Column("usuarioNome")]
         [Display(Name = "Nome")]
         public string? usuarioNome { get; set; }

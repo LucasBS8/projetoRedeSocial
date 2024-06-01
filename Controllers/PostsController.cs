@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,38 @@ namespace projetoRedeSocial.Controllers
         public PostsController(Contexto context)
         {
             _context = context;
+        }
+
+        public ActionResult HomePost()
+        {
+            // Simulating data fetch, replace this with actual data fetch from database
+            var posts = new List<Post>
+            {
+                new Post { postId = 1, postTitulo = "Post 1", postDesc = "Descrição 1", postCor = "#ffcc00", postDate = "2023-06-01", postStatus = "Ativo" },
+                new Post { postId = 2, postArquivo = "imagem.jpeg", postCor = "#00ccff", postDate = "2023-06-02", postStatus = "Ativo" },
+                // Add more posts
+            };
+
+            var postViewModels = new List<Post>();
+
+            foreach (var post in posts)
+            {
+
+                postViewModels.Add(new Post
+                {
+
+                    postId = post.postId,
+                    usuarioPost = post.usuarioPost,
+                    postTitulo = post.postTitulo,
+                    postDesc = post.postDesc,
+                    postArquivo = post.postArquivo,
+                    postCor = post.postCor,
+                    postDate = post.postDate,
+                    postStatus = post.postStatus
+                });
+            }
+
+            return View(postViewModels);
         }
 
         // GET: Posts
@@ -47,8 +80,16 @@ namespace projetoRedeSocial.Controllers
         // GET: Posts/Create
         public IActionResult Create()
         {
+            string? userId = HttpContext.Session.GetString("UserId");
+            var post = new Post
+            {
+                usuarioPost = _context.usuario.Find(int.Parse(userId)),
+                usuarioId = int.Parse(userId),
+                postDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                postStatus = "Privado" // Valor padrão, pode ser ajustado conforme necessário
+            };
             ViewData["usuarioId"] = new SelectList(_context.usuario, "usuarioId", "usuarioId");
-            return View();
+            return View(post);
         }
 
         // POST: Posts/Create
@@ -56,17 +97,19 @@ namespace projetoRedeSocial.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("postId,usuarioId,postTitulo,postDesc,postArquivo,postCor,postDate,postStatus")] Post post)
+        public async Task<IActionResult> Create([Bind("postId,postTitulo,postDesc,postArquivo,postCor,postDate,postStatus")] Post post)
         {
+
             if (ModelState.IsValid)
             {
+                post.usuarioId = int.Parse(HttpContext.Session.GetString("UserId"));
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["usuarioId"] = new SelectList(_context.usuario, "usuarioId", "usuarioId", post.usuarioId);
             return View(post);
         }
+
 
         // GET: Posts/Edit/5
         public async Task<IActionResult> Edit(int? id)

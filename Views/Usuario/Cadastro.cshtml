@@ -2,28 +2,27 @@
 
 @{
     Layout = "_LayoutDeslogado";
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Cadastro";
 }
 
-<div class="pt-5  d-flex justify-content-center ">
-    <form asp-controller="Usuario" asp-action="Entrar" method="post" class="form p-5 radiusBorder bg-primary text-white w-50">
+<div class="pt-5 d-flex justify-content-center">
+    <form asp-controller="Usuario" asp-action="Registrar" method="post" class="form p-5 radiusBorder bg-primary text-white w-50">
+
         <h1 class="text-center">NexHub</h1>
         <h3 class="text-center">Cadastro</h3>
         <div class="mb-3">
-            <label class="form-label pt-3">Email</label>
-            <input asp-for="usuarioNome" type="text" class="form-control" placeholder="nome">
-
+            <label class="form-label pt-3">Nome</label>
+            <input asp-for="usuarioNome" type="text" class="form-control" placeholder="Nome">
             <label class="form-label pt-3">Email</label>
             <input asp-for="usuarioEmail" type="email" class="form-control" placeholder="nome@exemplo.com">
             <label class="form-label pt-3">Senha</label>
             <input asp-for="usuarioSenha" type="password" class="form-control" placeholder="senha">
         </div>
-        <div class="d-grid gap-2 text-center p-4  d-flex justify-content-center">
+        <div class="d-grid gap-2 text-center p-4 d-flex justify-content-center">
             <button type="submit" class="btn btn-primary w-75">Cadastrar</button>
         </div>
         <div class="d-grid gap text-center">
-            Já tem conta?<a asp-controller="Usuario" asp-action="Login" class="text-info">Login</a>
+            Já tem conta?<a asp-controller="Usuario" asp-action="Login" class="pl-2 text-info">Entrar</a>
         </div>
     </form>
 </div>
-

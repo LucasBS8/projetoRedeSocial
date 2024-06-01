@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using projetoRedeSocial.Models;
 
@@ -35,17 +34,52 @@ namespace projetoRedeSocial.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    return RedirectToAction("Index", "Posts");
+                    var user = _context.usuario
+                        .FirstOrDefault(u => u.usuarioEmail == usuario.usuarioEmail && u.usuarioSenha == usuario.usuarioSenha);
+
+                    if (user != null)
+                    {
+                        HttpContext.Session.SetString("UserId", user.usuarioId.ToString());
+                        // Authentication logic here
+                        return RedirectToAction("HomePost", "Posts");
+                    }
+                    else
+                    {
+                        TempData["Mensagem"] = "Email ou senha inválidos.";
+                        return View("Login");
+                    }
                 }
 
-                return View("Index");
+                return View("Login");
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 TempData["Mensagem"] = "Erro: " + ex.Message;
-                return RedirectToAction("Index");
+                return View("Login");
             }
         }
+
+        [HttpPost]
+        public ActionResult Registrar(Usuario usuario)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(usuario);
+                    _context.SaveChanges();
+                    return RedirectToAction("Login");
+                }
+
+                return View("Cadastro");
+            }
+            catch (Exception ex)
+            {
+                TempData["Mensagem"] = "Erro: " + ex.Message;
+                return View("Cadastro");
+            }
+        }
+
 
         // GET: Usuario
         public async Task<IActionResult> Index()
@@ -84,7 +118,7 @@ namespace projetoRedeSocial.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("usuarioId,usuarioNome,usuarioTelefone,usuarioEmail,usuarioSenha,usuarioEndereco,usuarioCPF")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("usuarioId,usuarioImagem,usuarioDesc,usuarioNome,usuarioTelefone,usuarioEmail,usuarioSenha,usuarioEndereco,usuarioCPF")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
@@ -116,7 +150,7 @@ namespace projetoRedeSocial.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("usuarioId,usuarioNome,usuarioTelefone,usuarioEmail,usuarioSenha,usuarioEndereco,usuarioCPF")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("usuarioId,usuarioImagem,usuarioDesc,usuarioNome,usuarioTelefone,usuarioEmail,usuarioSenha,usuarioEndereco,usuarioCPF")] Usuario usuario)
         {
             if (id != usuario.usuarioId)
             {

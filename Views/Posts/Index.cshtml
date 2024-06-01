@@ -1,4 +1,4 @@
-﻿@model IEnumerable<projetoRedeSocial.Models.Post>
+﻿  @model IEnumerable<projetoRedeSocial.Models.Post>
 
 @{
     ViewData["Title"] = "Index";
@@ -12,60 +12,33 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.usuarioPost)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.postTitulo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.postDesc)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.postArquivo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.postCor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.postDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.postStatus)
-            </th>
+            <th>@Html.DisplayNameFor(model => model.usuarioPost)</th>
+            <th>@Html.DisplayNameFor(model => model.postTitulo)</th>
+            <th>@Html.DisplayNameFor(model => model.postDesc)</th>
+            <th>@Html.DisplayNameFor(model => model.postArquivo)</th>
+            <th>@Html.DisplayNameFor(model => model.postCor)</th>
+            <th>@Html.DisplayNameFor(model => model.postDate)</th>
+            <th>@Html.DisplayNameFor(model => model.postStatus)</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.usuarioPost.usuarioId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.postTitulo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.postDesc)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.postArquivo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.postCor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.postDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.postStatus)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.postId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.postId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.postId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.usuarioPost.usuarioId)</td>
+                <td>@Html.DisplayFor(modelItem => item.postTitulo)</td>
+                <td>@Html.DisplayFor(modelItem => item.postDesc)</td>
+                <td>@Html.DisplayFor(modelItem => item.postArquivo)</td>
+                <td>@Html.DisplayFor(modelItem => item.postCor)</td>
+                <td>@Html.DisplayFor(modelItem => item.postDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.postStatus)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.postId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.postId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.postId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

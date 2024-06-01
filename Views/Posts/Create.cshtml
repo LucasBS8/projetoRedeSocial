@@ -1,62 +1,92 @@
 ﻿@model projetoRedeSocial.Models.Post
 
 @{
+    Layout = "_LayoutVazio";
     ViewData["Title"] = "Create";
+
 }
 
-<h1>Create</h1>
+<div class="d-flex justify-content-center">
+    <div class="col-md-6">
+        <h4 class="text-center mb-4" style="font-size: 2em;">Post</h4>
+        <form asp-action="Create" enctype="multipart/form-data">
+            <input asp-for="postDate" type="hidden" />
+            <input asp-for="usuarioId" type="hidden"/>
 
-<h4>Post</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger text-center"></div>
+
             <div class="form-group">
-                <label asp-for="usuarioId" class="control-label"></label>
-                <select asp-for="usuarioId" class ="form-control" asp-items="ViewBag.usuarioId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="postTitulo" class="control-label"></label>
-                <input asp-for="postTitulo" class="form-control" />
+                <label asp-for="postTitulo" class="control-label">Título</label>
+                <input asp-for="postTitulo" class="form-control" style="border-radius: 10px;" required />
                 <span asp-validation-for="postTitulo" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="postDesc" class="control-label"></label>
-                <input asp-for="postDesc" class="form-control" />
+                <label asp-for="postDesc" class="control-label">Descrição</label>
+                <textarea asp-for="postDesc" class="form-control" style="border-radius: 10px;"></textarea>
                 <span asp-validation-for="postDesc" class="text-danger"></span>
             </div>
+
+
             <div class="form-group">
-                <label asp-for="postArquivo" class="control-label"></label>
-                <input asp-for="postArquivo" class="form-control" />
-                <span asp-validation-for="postArquivo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="postCor" class="control-label"></label>
-                <input asp-for="postCor" class="form-control" />
-                <span asp-validation-for="postCor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="postDate" class="control-label"></label>
-                <input asp-for="postDate" class="form-control" />
-                <span asp-validation-for="postDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="postStatus" class="control-label"></label>
-                <input asp-for="postStatus" class="form-control" />
+                <label asp-for="postStatus" class="control-label">Status</label>
+                <div class="form-check">
+                    <input asp-for="postStatus" type="radio" name="postStatus" value="Privado" class="form-check-input" required />
+                    <label class="form-check-label" for="postStatus">Privado</label>
+                </div>
+                <div class="form-check">
+                    <input asp-for="postStatus" type="radio" name="postStatus" value="Público" class="form-check-input" required />
+                    <label class="form-check-label" for="postStatus">Público</label>
+                </div>
                 <span asp-validation-for="postStatus" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label asp-for="postCor" class="control-label">Cor</label>
+                <input asp-for="postCor" type="color" class="form-control" style="width: 50px; height: 50px;" required />
+                <span asp-validation-for="postCor" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="postArquivo" class="control-label">Arquivo</label>
+                <input asp-for="postArquivo" type="file" class="form-control" accept="image/*,video/*" onchange="previewFile()" />
+                <span asp-validation-for="postArquivo" class="text-danger"></span>
+                <img id="file-preview" src="#" alt="Pré-visualização do arquivo" style="display:none; width: 100%; height: auto;" />
+            </div>
+
+            <div class="form-group d-flex justify-content-between mt-4">
+                <a asp-action="HomePost" class="btn btn-outline-secondary w-50 me-2">Voltar</a>
+                <input type="submit" value="Postar" class="btn btn-primary w-50 ms-2" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function previewFile() {
+            const preview = document.getElementById('file-preview');
+            const file = document.querySelector('input[type=file]').files[0];
+            const reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            }, false);
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.getElementById('file-drag').addEventListener('click', function () {
+            document.querySelector('input[type=file]').click();
+        });
+
+        document.querySelector('input[type=file]').addEventListener('change', previewFile);
+    </script>
 }

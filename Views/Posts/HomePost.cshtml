@@ -1,0 +1,53 @@
+﻿  @model IEnumerable<projetoRedeSocial.Models.Post>
+
+@{
+    ViewBag.Title = "Posts";
+}
+
+<style>
+    .post-card {
+        width: 200px;
+        height: 200px;
+        border: 1px solid #ddd;
+        border-radius: 30px;
+        margin: 10px;
+        text-align: center;
+        color: #fff;
+    }
+
+    .post-title {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    .post-desc {
+        font-size: 1em;
+    }
+
+    .rounded-img {
+        border-radius: 30px;
+    }
+</style>
+
+    <div class="container">
+        <div class="row">
+            @foreach (var post in Model)
+            {
+                <div class="col-4">
+                <a asp-action="Details" asp-route-id="@post.postId">
+                    <div class="post-card" style="background-color: @(string.IsNullOrEmpty(post.postArquivo) ? post.postCor : "transparent")">
+                        @if (!string.IsNullOrEmpty(post.postArquivo))
+                        {
+                        <img src="@Url.Content("~/imgPosts/" + post.postArquivo)" class="img-fluid h-100 rounded-img" alt="Post Image" />
+                        }
+                        else
+                        {
+                            <div class="post-title">@post.postTitulo</div>
+                            <div class="post-desc">@post.postDesc</div>
+                        }
+                    </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>

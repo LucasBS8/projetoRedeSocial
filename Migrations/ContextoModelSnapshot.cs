@@ -210,6 +210,14 @@ namespace projetoRedeSocial.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("usuarioTelefone");
 
+                    b.Property<string>("usuarioDesc")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("usuarioDesc");
+
+                    b.Property<string>("usuarioImagem")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("usuarioImagem");
+
                     b.HasKey("usuarioId");
 
                     b.ToTable("usuario");

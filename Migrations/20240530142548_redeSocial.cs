@@ -17,6 +17,8 @@ namespace projetoRedeSocial.Migrations
                     usuarioId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     usuarioNome = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    usuarioImagem = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    usuarioDesc = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     usuarioTelefone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     usuarioEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     usuarioSenha = table.Column<string>(type: "nvarchar(max)", nullable: true),
