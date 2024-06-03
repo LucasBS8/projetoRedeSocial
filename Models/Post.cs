@@ -40,5 +40,6 @@ namespace projetoRedeSocial.Models
         [Column("postStatus")]
         [Display(Name = "Status")]
         public string? postStatus { get; set; }
+
     }
 }

@@ -95,20 +95,41 @@ namespace projetoRedeSocial.Controllers
         // POST: Posts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("postId,postTitulo,postDesc,postArquivo,postCor,postDate,postStatus")] Post post)
-        {
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Create([Bind("postId,postTitulo,postDesc,postCor,postStatus")] Post post, IFormFile postArquivo)
+{
+    if (ModelState.IsValid)
+    {
+        // Assign the current user ID from session
+        post.usuarioId = int.Parse(HttpContext.Session.GetString("UserId"));
 
-            if (ModelState.IsValid)
+        // Handle file upload
+        if (postArquivo != null && postArquivo.Length > 0)
+        {
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + postArquivo.FileName;
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            // Ensure the uploads folder exists
+            Directory.CreateDirectory(uploadsFolder);
+
+            // Save the file to the server
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
-                post.usuarioId = int.Parse(HttpContext.Session.GetString("UserId"));
-                _context.Add(post);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(HomePost));
+                await postArquivo.CopyToAsync(fileStream);
             }
-            return View(post);
+
+            // Set the postArquivo property to the file path
+            post.postArquivo = "/uploads/" + uniqueFileName;
         }
+
+        _context.Add(post);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(HomePost));
+    }
+    return View(post);
+}
 
 
         // GET: Posts/Edit/5

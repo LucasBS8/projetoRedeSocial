@@ -3,7 +3,6 @@
 @{
     Layout = "_LayoutVazio";
     ViewData["Title"] = "Create";
-
 }
 
 <div class="d-flex justify-content-center">
@@ -11,7 +10,7 @@
         <h4 class="text-center mb-4" style="font-size: 2em;">Post</h4>
         <form asp-action="Create" enctype="multipart/form-data">
             <input asp-for="postDate" type="hidden" />
-            <input asp-for="usuarioId" type="hidden"/>
+            <input asp-for="usuarioId" type="hidden" />
 
             <div asp-validation-summary="ModelOnly" class="text-danger text-center"></div>
 
@@ -26,7 +25,6 @@
                 <textarea asp-for="postDesc" class="form-control" style="border-radius: 10px;"></textarea>
                 <span asp-validation-for="postDesc" class="text-danger"></span>
             </div>
-
 
             <div class="form-group">
                 <label asp-for="postStatus" class="control-label">Status</label>
