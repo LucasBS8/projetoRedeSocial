@@ -8,30 +8,33 @@
     <div class="row">
         @foreach (var post in Model)
         {
-            <div class="col-4">
-                <a asp-action="Details" asp-route-id="@post.postId">
-                    <div class="post-card" style="background-color: @post.postCor">
-                        @if (!string.IsNullOrEmpty(post.postArquivo))
-                        {
-                            if (!post.postArquivo.Contains(".mp4"))
+            @if (post.postStatus == "1")
+            {
+                <div class="col-4">
+                    <a asp-action="Details" asp-route-id="@post.postId">
+                        <div class="post-card" style="background-color: @post.postCor">
+                            @if (!string.IsNullOrEmpty(post.postArquivo))
                             {
-                                <img src="@Url.Content(post.postArquivo)" class="img-fluid rounded-img" alt="Post Image" />
+                                if (!post.postArquivo.Contains(".mp4"))
+                                {
+                                    <img src="@Url.Content(post.postArquivo)" class="img-fluid rounded-img" alt="Post Image" />
+                                }
+                                else
+                                {
+                                    <video src="@Url.Content(post.postArquivo)" class="img-fluid rounded-video">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                }
                             }
                             else
                             {
-                                <video src="@Url.Content(post.postArquivo)" class="img-fluid rounded-video">
-                                    Your browser does not support the video tag.
-                                </video>
+                                <div class="post-title">@post.postTitulo</div>
+                                <div class="post-desc">@post.postDesc</div>
                             }
-                        }
-                        else
-                        {
-                            <div class="post-title">@post.postTitulo</div>
-                            <div class="post-desc">@post.postDesc</div>
-                        }
-                    </div>
-                </a>
-            </div>
+                        </div>
+                    </a>
+                </div>
+            }
         }
     </div>
 </div>

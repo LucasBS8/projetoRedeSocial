@@ -29,11 +29,11 @@
             <div class="form-group">
                 <label asp-for="postStatus" class="control-label">Status</label>
                 <div class="form-check">
-                    <input asp-for="postStatus" type="radio" name="postStatus" value="Privado" class="form-check-input" required />
+                    <input asp-for="postStatus" type="radio" name="postStatus" value="0" class="form-check-input" required />
                     <label class="form-check-label" for="postStatus">Privado</label>
                 </div>
                 <div class="form-check">
-                    <input asp-for="postStatus" type="radio" name="postStatus" value="Público" class="form-check-input" required />
+                    <input asp-for="postStatus" type="radio" name="postStatus" value="1" class="form-check-input" required />
                     <label class="form-check-label" for="postStatus">Público</label>
                 </div>
                 <span asp-validation-for="postStatus" class="text-danger"></span>
@@ -47,7 +47,7 @@
 
             <div class="form-group">
                 <label asp-for="postArquivo" class="control-label">Arquivo</label>
-                <input asp-for="postArquivo" type="file" class="form-control" accept="image/*,video/*" onchange="previewFile()" />
+                <input asp-for="postArquivo" type="file" class="form-control" onchange="previewFile()" />
                 <span asp-validation-for="postArquivo" class="text-danger"></span>
                 <img id="file-preview" src="#" alt="Pré-visualização do arquivo" style="display:none; width: 100%; height: auto;" />
             </div>

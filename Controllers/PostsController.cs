@@ -21,32 +21,6 @@ namespace projetoRedeSocial.Controllers
 
         public async Task<IActionResult> HomePost()
         {
-            /*            // Simulating data fetch, replace this with actual data fetch from database
-                        var posts = new List<Post>
-                        {
-                            new Post { postId = 1, postTitulo = "Post 1", postDesc = "Descrição 1", postCor = "#ffcc00", postDate = "2023-06-01", postStatus = "Ativo" },
-                            new Post { postId = 2, postArquivo = "imagem.jpeg", postCor = "#00ccff", postDate = "2023-06-02", postStatus = "Ativo" },
-                            // Add more posts
-                        };
-
-                        var postViewModels = new List<Post>();
-
-                        foreach (var post in posts)
-                        {
-
-                            postViewModels.Add(new Post
-                            {
-
-                                postId = post.postId,
-                                usuarioPost = post.usuarioPost,
-                                postTitulo = post.postTitulo,
-                                postDesc = post.postDesc,
-                                postArquivo = post.postArquivo,
-                                postCor = post.postCor,
-                                postDate = post.postDate,
-                                postStatus = post.postStatus
-                            });
-                        }*/
             var contexto = _context.post.Include(p => p.usuarioPost);
             return View(await contexto.ToListAsync());
         }
@@ -61,6 +35,10 @@ namespace projetoRedeSocial.Controllers
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            Usuario usuario = _context.usuario.Find(_context.post.FirstOrDefaultAsync(m => m.postId == id));
+
+            ViewData["usuario"] = usuario;
+
             if (id == null || _context.post == null)
             {
                 return NotFound();
@@ -86,7 +64,7 @@ namespace projetoRedeSocial.Controllers
                 usuarioPost = _context.usuario.Find(int.Parse(userId)),
                 usuarioId = int.Parse(userId),
                 postDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                postStatus = "Privado" // Valor padrão, pode ser ajustado conforme necessário
+                postStatus = "0"
             };
             ViewData["usuarioId"] = new SelectList(_context.usuario, "usuarioId", "usuarioId");
             return View(post);

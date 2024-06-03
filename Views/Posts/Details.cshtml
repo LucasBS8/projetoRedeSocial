@@ -1,10 +1,16 @@
 ﻿@model projetoRedeSocial.Models.Post
 
 @{
+    
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+@* ViewData["usuario"] *@
+<div class="col">
+    <a asp-controller="Usuario" asp-action="Details" asp-route-id="@Model.usuarioPost.usuarioId"><img src="@Url.Content(Model.postArquivo)" /></a>
+</div>
+
+
 
 <div>
     <h4>Post</h4>

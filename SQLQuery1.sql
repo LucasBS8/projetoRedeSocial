@@ -2,4 +2,4 @@
 
 use redeSocialDB;
 
-select * from usuario;
+select * from post;

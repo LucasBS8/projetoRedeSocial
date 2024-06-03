@@ -1,5 +1,7 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿
+
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,14 +23,19 @@
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li>
-                        <a href="#" class="nav-link text-white">
+
+                        <a asp-controller="Posts" asp-action="HomePost" class="nav-link text-white">
                             <i class="fs-5 bi bi-house-fill"></i><span class="fs-4 ms-3 d-none d-sm-inline">Página principal</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link text-white">
-                            <i class="fs-5 bi bi-person-fill"></i><span class="fs-4 ms-3 d-none d-sm-inline">Perfil</span>
-                        </a>
+                        @{
+
+                            var userId = Context.Request.Cookies["UserId"];
+                                <a asp-controller="Usuario" asp-action="Details" asp-route-id="@userId" class="nav-link text-white">
+                                    <i class="fs-5 bi bi-person-fill"></i><span class="fs-4 ms-3 d-none d-sm-inline">Perfil</span>
+                                </a>
+                        }
                     </li>
                     <li>
                         <a href="#" class="nav-link text-white">
