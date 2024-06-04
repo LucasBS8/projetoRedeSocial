@@ -39,6 +39,10 @@ namespace projetoRedeSocial.Controllers
 
                     if (user != null)
                     {
+                        // Definir o cookie (por exemplo, após o login)
+                        Response.Cookies.Append("UserId", user.usuarioId.ToString());
+
+
                         HttpContext.Session.SetString("UserId", user.usuarioId.ToString());
                         // Authentication logic here
                         return RedirectToAction("HomePost", "Posts");

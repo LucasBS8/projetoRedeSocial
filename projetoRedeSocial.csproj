@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="HomePage\" />
     <Folder Include="wwwroot\img\" />
     <Folder Include="wwwroot\video\" />
   </ItemGroup>

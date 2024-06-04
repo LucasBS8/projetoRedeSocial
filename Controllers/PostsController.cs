@@ -12,6 +12,7 @@ namespace projetoRedeSocial.Controllers
 {
     public class PostsController : Controller
     {
+
         private readonly Contexto _context;
 
         public PostsController(Contexto context)
@@ -21,6 +22,7 @@ namespace projetoRedeSocial.Controllers
 
         public async Task<IActionResult> HomePost()
         {
+            ViewBag.userId = HttpContext.Session.GetString("UserId");
             var contexto = _context.post.Include(p => p.usuarioPost);
             return View(await contexto.ToListAsync());
         }
@@ -34,10 +36,7 @@ namespace projetoRedeSocial.Controllers
 
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(int? id)
-        {
-            Usuario usuario = _context.usuario.Find(_context.post.FirstOrDefaultAsync(m => m.postId == id));
-
-            ViewData["usuario"] = usuario;
+        { 
 
             if (id == null || _context.post == null)
             {
@@ -58,11 +57,11 @@ namespace projetoRedeSocial.Controllers
         // GET: Posts/Create
         public IActionResult Create()
         {
-            string? userId = HttpContext.Session.GetString("UserId");
+            ViewBag.userId = HttpContext.Session.GetString("UserId");
             var post = new Post
             {
-                usuarioPost = _context.usuario.Find(int.Parse(userId)),
-                usuarioId = int.Parse(userId),
+                usuarioPost = _context.usuario.Find(int.Parse(ViewBag.userId)),
+                usuarioId = int.Parse(ViewBag.userId),
                 postDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                 postStatus = "0"
             };
