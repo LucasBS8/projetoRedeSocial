@@ -100,8 +100,9 @@ namespace projetoRedeSocial.Controllers
             {
                 return NotFound();
             }
-
+            ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
             var usuario = await _context.usuario
+            
                 .FirstOrDefaultAsync(m => m.usuarioId == id);
             if (usuario == null)
             {

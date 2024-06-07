@@ -4,63 +4,96 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<div class="row align-items-center">
+    <div class="col-auto row align-items-center">
+        @if (Model.usuarioImagem != null)
+        {
+            <img src="@Url.Content(Model.usuarioImagem)" class="post-img h1 display-1" style="width: 65px; height: 65px;" />
+        }
+        else
+        {
+            <i class="h1 display-1 bi bi-person-circle post-img " style="color:white"></i>
+        }
+    </div>
 
-<div>
-    <h4>Usuario</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.usuarioImagem)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.usuarioImagem)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.usuarioDesc)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.usuarioDesc)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.usuarioNome)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.usuarioNome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.usuarioTelefone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.usuarioTelefone)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.usuarioEmail)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.usuarioEmail)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.usuarioSenha)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.usuarioSenha)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.usuarioEndereco)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.usuarioEndereco)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.usuarioCPF)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.usuarioCPF)
-        </dd>
-    </dl>
+    <div class="col align-items-center text-light">
+        <h1>@Model.usuarioNome</h1>
+        <h4>Telefone: @Model.usuarioTelefone</h4>
+        <h4>E-mail: @Model.usuarioEmail</h4>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.usuarioId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<hr />
+
+<div class="container">
+    <div class="row align-content-stretch">
+
+        @foreach (var post in ViewBag.Posts)
+        {
+            @if (post.usuarioId == Model.usuarioId)
+            {
+                <div class="col-4">
+                    <a asp-action="Details" asp-route-id="@post.postId">
+                        <div class="post-card" style="background-color: @post.postCor">
+                            @if (!string.IsNullOrEmpty(post.postArquivo))
+                            {
+                                if (!post.postArquivo.Contains(".mp4"))
+                                {
+                                    <img src="@Url.Content(post.postArquivo)" class="img-fluid rounded-img" alt="Post Image" />
+                                }
+                                else
+                                {
+                                    <video src="@Url.Content(post.postArquivo)" class="img-fluid rounded-video">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                }
+                            }
+                            else
+                            {
+                                <div class="post-title">@post.postTitulo</div>
+                                <div class="post-desc">@post.postDesc</div>
+                            }
+                        </div>
+                    </a>
+                </div>
+            }
+        }
+    </div>
 </div>
+
+<style>
+    .post-img {
+        border-radius: 30px;
+        margin: 10px;
+        text-align: center;
+        overflow: auto;
+    }
+
+    .post-card {
+        width: 198px;
+        height: 198px;
+        border: 1px solid #ddd;
+        border-radius: 30px;
+        margin: 10px;
+        text-align: center;
+        color: #fff;
+        overflow: hidden;
+    }
+
+    .post-title {
+        font-size: 1.2em;
+        margin-top: 20px;
+    }
+
+    .post-desc {
+        font-size: 1em;
+        margin: 10px 0;
+    }
+
+    .rounded-img, .rounded-video {
+        width: 198px;
+        height: 198px;
+        border-radius: 30px;
+        object-fit: cover;
+    }
+</style>
