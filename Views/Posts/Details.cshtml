@@ -11,7 +11,7 @@
         <a asp-controller="Usuario" asp-action="Details" asp-route-id="@Model.usuarioPost?.usuarioId">
             @if (Model.usuarioPost?.usuarioImagem != null)
             {
-                <img src="@Url.Content(Model.usuarioPost.usuarioImagem)" class="img-fluid rounded-img" />
+                <img src="@Url.Content(Model.usuarioPost.usuarioImagem)" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" />
             }
             else
             {
@@ -30,19 +30,19 @@
 @* <dd class="col-sm-10">
     @Html.DisplayFor(model => model.usuarioPost.usuarioId)
 </dd> *@
-
-<div class=" row d-flex justify-content-lg-around align-items-center">
-    <hr />
-    <div class="col-5 d-flex justify-content-center flex-column text-center ">
-        <p class="h3">@Html.DisplayFor(model => model.postTitulo)</p>
-        <div class="h4" style="overflow-y: scroll; height: 400px;">
-            @Html.DisplayFor(model => model.postDesc)
+@if (!string.IsNullOrEmpty(Model.postArquivo))
+{
+    <div class=" row d-flex justify-content-lg-around align-items-center ">
+        <hr />
+        <div class="col-5 d-flex justify-content-center flex-column text-center ">
+            <p class="h3">@Html.DisplayFor(model => model.postTitulo)</p>
+            <div class="h4" style="overflow-y: scroll; height: 400px;">
+                @Html.DisplayFor(model => model.postDesc)
+            </div>
         </div>
-    </div>
-    <div class="col-5 ">
-        @if (!string.IsNullOrEmpty(Model.postArquivo))
-        {
-            if (!Model.postArquivo.Contains(".mp4"))
+        <div class="col-5 ">
+
+            @if (!Model.postArquivo.Contains(".mp4"))
             {
                 <img src="@Url.Content(Model.postArquivo)" class="post-img" />
             }
@@ -52,22 +52,35 @@
                     Your browser does not support the video tag.
                 </video>
             }
-        }
-    </div>
-</div>
-<hr/>
 
+        </div>
+    </div>
+    <hr />
+}
+else
+{
+    <div class=" row d-flex justify-content-lg-around align-items-center text-white">
+        <hr />
+        <div class="col-10 d-flex justify-content-center flex-column text-center ">
+            <p class="h3">@Html.DisplayFor(model => model.postTitulo)</p>
+            <div class="h4">
+                @Html.DisplayFor(model => model.postDesc)
+            </div>
+        </div>
+    </div>
+    <hr />
+}
 
 <div class="column">
     <div class="col row align-items-center">
         <a asp-controller="Usuario" asp-action="Details" asp-route-id="@Model.usuarioPost?.usuarioId">
             @if (Model.usuarioPost?.usuarioImagem != null)
             {
-                <img src="@Url.Content(Model.usuarioPost.usuarioImagem)" class="img-fluid rounded-img" />
+                <img src="@Url.Content(Model.usuarioPost.usuarioImagem)" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" />
             }
             else
             {
-                <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
+                <i class="fs-1 bi bi-person-circle rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" style="color:white"></i>
             }
             <span class="fs-4 ms-3 d-none d-sm-inline h1">@Model.usuarioPost?.usuarioNome</span>
         </a>
@@ -79,16 +92,7 @@
     </div>
 
 </div>
-<style>
-    .post-img {
-        width: 500px;
-        height: 400px;
-        border-radius: 30px;
-        margin: 10px;
-        text-align: center;
-        overflow: auto;
-    }
-</style>
+
 
 
 @* <div>

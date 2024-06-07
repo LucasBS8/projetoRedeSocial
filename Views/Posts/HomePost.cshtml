@@ -4,40 +4,82 @@
     ViewBag.Title = "Posts";
 }
 
-<div class="container">
-    <div class="row align-content-stretch">
-        @foreach (var post in Model)
-        {
-            @if (post.postStatus == "1")
-            {
-                <div class="col-4">
-                    <a asp-action="Details" asp-route-id="@post.postId">
-                        <div class="post-card" style="background-color: @post.postCor">
-                            @if (!string.IsNullOrEmpty(post.postArquivo))
-                            {
-                                if (!post.postArquivo.Contains(".mp4"))
-                                {
-                                    <img src="@Url.Content(post.postArquivo)" class="img-fluid rounded-img" alt="Post Image" />
-                                }
-                                else
-                                {
-                                    <video src="@Url.Content(post.postArquivo)" class="img-fluid rounded-video">
-                                        Your browser does not support the video tag.
-                                    </video>
-                                }
-                            }
-                            else
-                            {
-                                <div class="post-title">@post.postTitulo</div>
-                                <div class="post-desc">@post.postDesc</div>
-                            }
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Posts</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Perfis</button>
+    </li>
+
+</ul>
+<div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+        <div class="container">
+            <div class="row align-content-stretch">
+                @foreach (var post in Model)
+                {
+                    @if (post.postStatus == "1")
+                    {
+                        <div class="col-auto">
+                            <a asp-action="Details" asp-route-id="@post.postId">
+                                <div class="post-card" style="background-color: @post.postCor">
+                                    @if (!string.IsNullOrEmpty(post.postArquivo))
+                                    {
+                                        if (!post.postArquivo.Contains(".mp4"))
+                                        {
+                                            <img src="@Url.Content(post.postArquivo)" class="img-fluid rounded-img" alt="Post Image" />
+                                        }
+                                        else
+                                        {
+                                            <video src="@Url.Content(post.postArquivo)" class="img-fluid rounded-video">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="post-title">@post.postTitulo</div>
+                                        <div class="post-desc">@post.postDesc</div>
+                                    }
+                                </div>
+                            </a>
                         </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+        @foreach (var usuario in ViewBag.Usuario)
+        {
+            <div class="row align-items-center">
+                <div class="col row align-items-center">
+                    <a asp-controller="Usuario" asp-action="Details" asp-route-id="@usuario.usuarioId">
+                        @if (usuario.usuarioImagem != null)
+                        {
+                            <img src="@Url.Content(usuario.usuarioImagem)" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
+                        }
+                        <span class="fs-4 ms-3 d-none d-sm-inline h1">@usuario.usuarioNome</span>
                     </a>
                 </div>
-            }
+
+                <div class="col d-flex align-items-center justify-content-end">
+                    <i class="bi bi-hand-thumbs-up-fill h1 p-3" style="color:white"></i>
+                </div>
+            </div>
         }
     </div>
+
+
 </div>
+
+
 
 <style>
     .post-card {
@@ -45,7 +87,7 @@
         height: 198px;
         border: 1px solid #ddd;
         border-radius: 30px;
-        margin: 10px;
+        margin: 5px;
         text-align: center;
         color: #fff;
         overflow: hidden;
@@ -58,7 +100,7 @@
 
     .post-desc {
         font-size: 1em;
-        margin: 10px 0;
+        margin: 55px 0;
     }
 
     .rounded-img, .rounded-video {

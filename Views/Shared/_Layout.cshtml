@@ -36,7 +36,7 @@
                             // Recuperar o cookie (por exemplo, em _Layout.cshtml)
                             var userIdCookie = httpContextAccessor.HttpContext.Request.Cookies["UserId"];
 
-                            <a asp-controller="Usuario" asp-action="Details" asp-route-id="@userIdCookie" class="nav-link text-white">
+                            <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@userIdCookie" class="nav-link text-white">
                                 <i class="fs-5 bi bi-person-fill"></i><span class="fs-4 ms-3 d-none d-sm-inline">Perfil</span>
                             </a>
                         }
@@ -62,7 +62,7 @@
 
         </div>
         <div class="row col min-vh-100">
-            <main role="main" class=" min-vh-100 flex-column align-self-center">
+            <main role="main" class=" min-vh-100 flex-column align-self-center  text-white">
                 @RenderBody()
             </main>
         </div>

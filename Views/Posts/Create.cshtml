@@ -5,60 +5,66 @@
     ViewData["Title"] = "Create";
 }
 
-<div class="d-flex justify-content-center">
-    <div class="col-md-6">
-        <h4 class="text-center mb-4" style="font-size: 2em;">Post</h4>
-        <form asp-action="Create" enctype="multipart/form-data">
-            <input asp-for="postDate" type="hidden" />
-            <input asp-for="usuarioId" type="hidden" />
+<form class="w-100 p-5" asp-action="Create" enctype="multipart/form-data">
+    <input asp-for="postDate" type="hidden" />
+    <input asp-for="usuarioId" type="hidden" />
 
-            <div asp-validation-summary="ModelOnly" class="text-danger text-center"></div>
-
-            <div class="form-group">
+    <div asp-validation-summary="ModelOnly" class="text-danger text-center"></div>
+    <div class="d-flex row justify-content-center">
+        <div class="col-5">
+            <h1 class="text-center display-2 fw-bold">Post</h1>
+            <div class="form-group col-auto">
                 <label asp-for="postTitulo" class="control-label">Título</label>
                 <input asp-for="postTitulo" class="form-control" style="border-radius: 10px;" required />
                 <span asp-validation-for="postTitulo" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group  col-auto">
                 <label asp-for="postDesc" class="control-label">Descrição</label>
                 <textarea asp-for="postDesc" class="form-control" style="border-radius: 10px;"></textarea>
-                <span asp-validation-for="postDesc" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group  col-auto">
                 <label asp-for="postStatus" class="control-label">Status</label>
                 <div class="form-check">
                     <input asp-for="postStatus" type="radio" name="postStatus" value="0" class="form-check-input" required />
                     <label class="form-check-label" for="postStatus">Privado</label>
                 </div>
-                <div class="form-check">
+                <div class="form-check  col-auto">
                     <input asp-for="postStatus" type="radio" name="postStatus" value="1" class="form-check-input" required />
                     <label class="form-check-label" for="postStatus">Público</label>
                 </div>
                 <span asp-validation-for="postStatus" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <label asp-for="postCor" class="control-label">Cor</label>
                 <input asp-for="postCor" type="color" class="form-control" style="width: 50px; height: 50px;" required />
                 <span asp-validation-for="postCor" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="postArquivo" class="control-label">Arquivo</label>
-                <input asp-for="postArquivo" type="file" class="form-control" onchange="previewFile()" />
-                <span asp-validation-for="postArquivo" class="text-danger"></span>
-                <img id="file-preview" src="#" alt="Pré-visualização do arquivo" style="display:none; width: 100%; height: auto;" />
-            </div>
-
             <div class="form-group d-flex justify-content-between mt-4">
                 <a asp-action="HomePost" class="btn btn-outline-secondary w-50 me-2">Voltar</a>
                 <input type="submit" value="Postar" class="btn btn-primary w-50 ms-2" />
             </div>
-        </form>
+        </div>
+
+
+        <div class="col-5 d-flex flex-column justify-content-center align-items-center">
+                <img class="mb-4 w-75" id="selectedImage" src=@Url.Content("~/imgSistema/imagemAdd.png")
+                     alt="example placeholder" style="object-fit:cotain;  border-radius: 30px" />
+
+
+            <div data-mdb-ripple-init class="btn btn-primary btn-rounded">
+                <label class="form-label text-white m-1" for="customFile1">Adicionar imagem</label>
+                <input asp-for="postArquivo" type="file" class="form-control d-none" id="customFile1" onchange="displaySelectedImage(event, 'selectedImage')" />
+                <span asp-validation-for="postArquivo" class="text-danger"></span>
+            </div>
+        </div>
+
+
     </div>
-</div>
+</form>
+
 
 @section Scripts {
     @{
@@ -66,25 +72,20 @@
     }
 
     <script>
-        function previewFile() {
-            const preview = document.getElementById('file-preview');
-            const file = document.querySelector('input[type=file]').files[0];
-            const reader = new FileReader();
 
-            reader.addEventListener("load", function () {
-                preview.src = reader.result;
-                preview.style.display = 'block';
-            }, false);
+        function displaySelectedImage(event, elementId) {
+            const selectedImage = document.getElementById(elementId);
+            const fileInput = event.target;
 
-            if (file) {
-                reader.readAsDataURL(file);
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    selectedImage.src = e.target.result;
+                };
+
+                reader.readAsDataURL(fileInput.files[0]);
             }
         }
-
-        document.getElementById('file-drag').addEventListener('click', function () {
-            document.querySelector('input[type=file]').click();
-        });
-
-        document.querySelector('input[type=file]').addEventListener('change', previewFile);
     </script>
 }

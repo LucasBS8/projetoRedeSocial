@@ -1,66 +1,95 @@
 ﻿@model projetoRedeSocial.Models.Usuario
 
 @{
+    Layout = "_LayoutVazio";
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<div class="row justify-content-center">
+    <div class="col-auto">
+        <form asp-action="Edit" enctype="multipart/form-data">
 
-<h4>Usuario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="usuarioId" />
-            <div class="form-group">
-                <label asp-for="usuarioImagem" class="control-label"></label>
-                <input asp-for="usuarioImagem" class="form-control" />
-                <span asp-validation-for="usuarioImagem" class="text-danger"></span>
+
+            <div>
+                <div class="d-flex justify-content-center mb-4">
+                    <img id="selectedAvatar" src="@Url.Content(Model.usuarioImagem)"
+                         class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="example placeholder" />
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <div data-mdb-ripple-init class="btn btn-primary btn-rounded">
+                        <label class="form-label text-white m-1" for="customFile2">Escolha uma imagem</label>
+                        <input asp-for="usuarioImagem" type="file" class="form-control d-none" id="customFile2" onchange="displaySelectedImage(event, 'selectedAvatar')" />
+                        <span asp-validation-for="usuarioImagem" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="usuarioDesc" class="control-label"></label>
-                <input asp-for="usuarioDesc" class="form-control" />
-                <span asp-validation-for="usuarioDesc" class="text-danger"></span>
+            <div class="d-flex row">
+                <div class="form-group">
+                    <label asp-for="usuarioDesc" class="control-label"></label>
+                    <input asp-for="usuarioDesc" class="form-control" />
+                    <span asp-validation-for="usuarioDesc" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="usuarioNome" class="control-label"></label>
+                    <input asp-for="usuarioNome" class="form-control" />
+                    <span asp-validation-for="usuarioNome" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="usuarioTelefone" class="control-label"></label>
+                    <input asp-for="usuarioTelefone" class="form-control" />
+                    <span asp-validation-for="usuarioTelefone" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="usuarioEmail" class="control-label"></label>
+                    <input asp-for="usuarioEmail" class="form-control" />
+                    <span asp-validation-for="usuarioEmail" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="usuarioSenha" class="control-label"></label>
+                    <input asp-for="usuarioSenha" class="form-control" />
+                    <span asp-validation-for="usuarioSenha" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="usuarioEndereco" class="control-label"></label>
+                    <input asp-for="usuarioEndereco" class="form-control" />
+                    <span asp-validation-for="usuarioEndereco" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="usuarioCPF" class="control-label"></label>
+                    <input asp-for="usuarioCPF" class="form-control" />
+                    <span asp-validation-for="usuarioCPF" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="usuarioNome" class="control-label"></label>
-                <input asp-for="usuarioNome" class="form-control" />
-                <span asp-validation-for="usuarioNome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="usuarioTelefone" class="control-label"></label>
-                <input asp-for="usuarioTelefone" class="form-control" />
-                <span asp-validation-for="usuarioTelefone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="usuarioEmail" class="control-label"></label>
-                <input asp-for="usuarioEmail" class="form-control" />
-                <span asp-validation-for="usuarioEmail" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="usuarioSenha" class="control-label"></label>
-                <input asp-for="usuarioSenha" class="form-control" />
-                <span asp-validation-for="usuarioSenha" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="usuarioEndereco" class="control-label"></label>
-                <input asp-for="usuarioEndereco" class="form-control" />
-                <span asp-validation-for="usuarioEndereco" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="usuarioCPF" class="control-label"></label>
-                <input asp-for="usuarioCPF" class="form-control" />
-                <span asp-validation-for="usuarioCPF" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="row col-4">
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+                <div>
+                    <a asp-controller="Usuario" asp-action="DetailsUser">Back to List</a>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
+
+<script>
+    function displaySelectedImage(event, elementId) {
+        const selectedImage = document.getElementById(elementId);
+        const fileInput = event.target;
+
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                selectedImage.src = e.target.result;
+            };
+
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    }
+</script>

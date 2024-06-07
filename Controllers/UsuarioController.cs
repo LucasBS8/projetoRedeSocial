@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using projetoRedeSocial.Models;
 
 namespace projetoRedeSocial.Controllers
@@ -112,6 +113,26 @@ namespace projetoRedeSocial.Controllers
             return View(usuario);
         }
 
+        // GET: Usuario/Details/5
+        public async Task<IActionResult> DetailsUser(int? id)
+        {
+            if (id == null || _context.usuario == null)
+            {
+                return NotFound();
+            }
+            ViewData["Users"] = _context.usuario.ToList();
+            ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
+            var usuario = await _context.usuario
+
+                .FirstOrDefaultAsync(m => m.usuarioId == id);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return View(usuario);
+        }
+
         // GET: Usuario/Create
         public IActionResult Create()
         {
@@ -155,7 +176,7 @@ namespace projetoRedeSocial.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("usuarioId,usuarioImagem,usuarioDesc,usuarioNome,usuarioTelefone,usuarioEmail,usuarioSenha,usuarioEndereco,usuarioCPF")] Usuario usuario)
+        public async Task<IActionResult> Edit(int id, [Bind("usuarioId,usuarioDesc,usuarioNome,usuarioTelefone,usuarioEmail,usuarioSenha,usuarioEndereco,usuarioCPF")] Usuario usuario, IFormFile? usuarioImagem)
         {
             if (id != usuario.usuarioId)
             {
@@ -166,6 +187,25 @@ namespace projetoRedeSocial.Controllers
             {
                 try
                 {
+                    if (usuarioImagem != null)
+                    {
+                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + usuarioImagem.FileName;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        // Certifique-se de que o diretório existe
+                        Directory.CreateDirectory(uploadsFolder);
+
+                        // Salvar o arquivo no servidor
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await usuarioImagem.CopyToAsync(fileStream);
+                        }
+
+                        // Atualizar o caminho da imagem no objeto usuario
+                        usuario.usuarioImagem = "/uploads/" + uniqueFileName;
+                    }
+
                     _context.Update(usuario);
                     await _context.SaveChangesAsync();
                 }
@@ -184,6 +224,7 @@ namespace projetoRedeSocial.Controllers
             }
             return View(usuario);
         }
+
 
         // GET: Usuario/Delete/5
         public async Task<IActionResult> Delete(int? id)
