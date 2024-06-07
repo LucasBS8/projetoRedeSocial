@@ -169,5 +169,6 @@ namespace projetoRedeSocial.Controllers
         {
           return (_context.curtidas?.Any(e => e.idCurtida == id)).GetValueOrDefault();
         }
+
     }
 }

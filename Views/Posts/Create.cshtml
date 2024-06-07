@@ -6,59 +6,69 @@
 }
 
 <div class="d-flex justify-content-center">
-    <div class="col-md-6">
-        <h4 class="text-center mb-4" style="font-size: 2em;">Post</h4>
-        <form asp-action="Create" enctype="multipart/form-data">
+    <div class="w-100">
+
+        <form class="w-100" asp-action="Create" enctype="multipart/form-data">
             <input asp-for="postDate" type="hidden" />
             <input asp-for="usuarioId" type="hidden" />
 
             <div asp-validation-summary="ModelOnly" class="text-danger text-center"></div>
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <h1 class="text-center display-2 fw-bold">Post</h1>
+                    <div class="form-group col-auto">
+                        <label asp-for="postTitulo" class="control-label">Título</label>
+                        <input asp-for="postTitulo" class="form-control" style="border-radius: 10px;" required />
+                        <span asp-validation-for="postTitulo" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group">
-                <label asp-for="postTitulo" class="control-label">Título</label>
-                <input asp-for="postTitulo" class="form-control" style="border-radius: 10px;" required />
-                <span asp-validation-for="postTitulo" class="text-danger"></span>
-            </div>
+                    <div class="form-group  col-auto">
+                        <label asp-for="postDesc" class="control-label">Descrição</label>
+                        <textarea asp-for="postDesc" class="form-control" style="border-radius: 10px;"></textarea>
+                    </div>
 
-            <div class="form-group">
-                <label asp-for="postDesc" class="control-label">Descrição</label>
-                <textarea asp-for="postDesc" class="form-control" style="border-radius: 10px;"></textarea>
-                <span asp-validation-for="postDesc" class="text-danger"></span>
-            </div>
+                    <div class="form-group  col-auto">
+                        <label asp-for="postStatus" class="control-label">Status</label>
+                        <div class="form-check">
+                            <input asp-for="postStatus" type="radio" name="postStatus" value="0" class="form-check-input" required />
+                            <label class="form-check-label" for="postStatus">Privado</label>
+                        </div>
+                        <div class="form-check  col-auto">
+                            <input asp-for="postStatus" type="radio" name="postStatus" value="1" class="form-check-input" required />
+                            <label class="form-check-label" for="postStatus">Público</label>
+                        </div>
+                        <span asp-validation-for="postStatus" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="postCor" class="control-label">Cor</label>
+                        <input asp-for="postCor" type="color" class="form-control" style="width: 50px; height: 50px;" required />
+                        <span asp-validation-for="postCor" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group">
-                <label asp-for="postStatus" class="control-label">Status</label>
-                <div class="form-check">
-                    <input asp-for="postStatus" type="radio" name="postStatus" value="0" class="form-check-input" required />
-                    <label class="form-check-label" for="postStatus">Privado</label>
+                    <div class="form-group d-flex justify-content-between mt-4">
+                        <a asp-action="HomePost" class="btn btn-outline-secondary w-50 me-2">Voltar</a>
+                        <input type="submit" value="Postar" class="btn btn-primary w-50 ms-2" />
+                    </div>
                 </div>
-                <div class="form-check">
-                    <input asp-for="postStatus" type="radio" name="postStatus" value="1" class="form-check-input" required />
-                    <label class="form-check-label" for="postStatus">Público</label>
+
+
+
+                <div class="col-auto">
+                    <div class="form-group">
+                        <label asp-for="postArquivo" class="control-label">Arquivo</label>
+                        <input asp-for="postArquivo" type="file" class="form-control" />
+                        <span asp-validation-for="postArquivo" class="text-danger"></span>
+                        <img id="file-preview" alt="Pré-visualização do arquivo" style="display:none; width: 500px; height: 500px;" />
+                    </div>
                 </div>
-                <span asp-validation-for="postStatus" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="postCor" class="control-label">Cor</label>
-                <input asp-for="postCor" type="color" class="form-control" style="width: 50px; height: 50px;" required />
-                <span asp-validation-for="postCor" class="text-danger"></span>
-            </div>
 
-            <div class="form-group">
-                <label asp-for="postArquivo" class="control-label">Arquivo</label>
-                <input asp-for="postArquivo" type="file" class="form-control" onchange="previewFile()" />
-                <span asp-validation-for="postArquivo" class="text-danger"></span>
-                <img id="file-preview" src="#" alt="Pré-visualização do arquivo" style="display:none; width: 100%; height: auto;" />
-            </div>
 
-            <div class="form-group d-flex justify-content-between mt-4">
-                <a asp-action="HomePost" class="btn btn-outline-secondary w-50 me-2">Voltar</a>
-                <input type="submit" value="Postar" class="btn btn-primary w-50 ms-2" />
-            </div>
         </form>
     </div>
 </div>
+
 
 @section Scripts {
     @{

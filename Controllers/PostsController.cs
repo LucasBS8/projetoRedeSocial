@@ -36,7 +36,7 @@ namespace projetoRedeSocial.Controllers
 
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(int? id)
-        { 
+        {
 
             if (id == null || _context.post == null)
             {
@@ -72,41 +72,40 @@ namespace projetoRedeSocial.Controllers
         // POST: Posts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-[HttpPost]
-[ValidateAntiForgeryToken]
-public async Task<IActionResult> Create([Bind("postId,postTitulo,postDesc,postCor,postStatus")] Post post, IFormFile postArquivo)
-{
-    if (ModelState.IsValid)
-    {
-        // Assign the current user ID from session
-        post.usuarioId = int.Parse(HttpContext.Session.GetString("UserId"));
-
-        // Handle file upload
-        if (postArquivo != null && postArquivo.Length > 0)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("postId,postTitulo,postDesc,postCor,postStatus")] Post post, IFormFile postArquivo)
         {
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-            var uniqueFileName = Guid.NewGuid().ToString() + "_" + postArquivo.FileName;
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-            // Ensure the uploads folder exists
-            Directory.CreateDirectory(uploadsFolder);
-
-            // Save the file to the server
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            // Assign the current user ID from session
+            post.usuarioId = int.Parse(HttpContext.Session.GetString("UserId"));
+            if (ModelState.IsValid)
             {
-                await postArquivo.CopyToAsync(fileStream);
+                // Handle file upload
+                if (postArquivo != null)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + postArquivo.FileName;
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    // Ensure the uploads folder exists
+                    Directory.CreateDirectory(uploadsFolder);
+
+                    // Save the file to the server
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await postArquivo.CopyToAsync(fileStream);
+                    }
+
+                    // Set the postArquivo property to the file path
+                    post.postArquivo = "/uploads/" + uniqueFileName;
+                }
+
+                _context.Add(post);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(HomePost));
             }
-
-            // Set the postArquivo property to the file path
-            post.postArquivo = "/uploads/" + uniqueFileName;
+            return View(post);
         }
-
-        _context.Add(post);
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(HomePost));
-    }
-    return View(post);
-}
 
 
         // GET: Posts/Edit/5
@@ -195,14 +194,14 @@ public async Task<IActionResult> Create([Bind("postId,postTitulo,postDesc,postCo
             {
                 _context.post.Remove(post);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PostExists(int id)
         {
-          return (_context.post?.Any(e => e.postId == id)).GetValueOrDefault();
+            return (_context.post?.Any(e => e.postId == id)).GetValueOrDefault();
         }
     }
 }

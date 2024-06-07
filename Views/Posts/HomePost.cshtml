@@ -10,7 +10,7 @@
         {
             @if (post.postStatus == "1")
             {
-                <div class="col-4">
+                <div class="col-auto">
                     <a asp-action="Details" asp-route-id="@post.postId">
                         <div class="post-card" style="background-color: @post.postCor">
                             @if (!string.IsNullOrEmpty(post.postArquivo))
@@ -45,7 +45,7 @@
         height: 198px;
         border: 1px solid #ddd;
         border-radius: 30px;
-        margin: 10px;
+        margin: 5px;
         text-align: center;
         color: #fff;
         overflow: hidden;
@@ -58,7 +58,7 @@
 
     .post-desc {
         font-size: 1em;
-        margin: 10px 0;
+        margin: 55px 0;
     }
 
     .rounded-img, .rounded-video {
