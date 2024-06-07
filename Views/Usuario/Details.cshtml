@@ -33,7 +33,7 @@
             @if (post.usuarioId == Model.usuarioId)
             {
                 <div class="col-4">
-                    <a asp-action="Details" asp-route-id="@post.postId">
+                    <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.postId">
                         <div class="post-card" style="background-color: @post.postCor">
                             @if (!string.IsNullOrEmpty(post.postArquivo))
                             {
