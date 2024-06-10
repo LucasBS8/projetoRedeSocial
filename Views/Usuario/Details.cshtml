@@ -4,8 +4,9 @@
     ViewData["Title"] = "Details";
 }
 
-<div class="row align-items-center">
-    <div class="col-auto row ">
+<div class="row align-items-center justify-content-between">
+
+    <div class="col-auto">
         <div class="col-auto align-content-center">
             @if (Model.usuarioImagem != null)
             {
@@ -22,6 +23,13 @@
         <h1>@Model.usuarioNome</h1>
         <h4>Telefone: @Model.usuarioTelefone</h4>
         <h4>E-mail: @Model.usuarioEmail</h4>
+    </div>
+
+
+    <div class="col-auto d-flex justify-content-center">
+        <a class="col-auto">
+            <i class="bi bi-person-plus-fill w-25" style="width:60px; object-fit: fill;"></i>
+        </a>
     </div>
 </div>
 
