@@ -101,14 +101,15 @@ namespace projetoRedeSocial.Controllers
             int idUsuarioSeguidor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             if (idUsuarioSeguidor != id)
             {
-                Seguidores seguidores = new Seguidores()
+                Seguidores seguidores = new()
                 {
                     idUsuario = id,
                     idUsuarioSeguidor = idUsuarioSeguidor,
                 };
                 _context.seguidores.Add(seguidores);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Details), new {id = id });
+                Console.WriteLine("---------------------------------Seguir----------------------------------------");
+                return RedirectToAction(nameof(Details), new { id });
             }
 
             return View();
@@ -125,7 +126,8 @@ namespace projetoRedeSocial.Controllers
             {
                 _context.seguidores.Remove(seguidor);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Details), new { id = id });
+                Console.WriteLine("---------------------------------Remove----------------------------------------");
+                return RedirectToAction(nameof(Details), new { id });
             }
 
             return View();
@@ -142,14 +144,16 @@ namespace projetoRedeSocial.Controllers
             }
             int valor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             ViewBag.UsuarioId = valor;
-            Seguidores seguidores = _context.seguidores.FirstOrDefault(s => s.idUsuario == id && s.idSeguidor == valor);
+            Seguidores? seguidores;
+            seguidores = _context.seguidores.FirstOrDefault(s => s.idUsuario == id && s.idSeguidor == valor);
             if (seguidores != null)
             {
                 ViewBag.Seguidor = seguidores.idUsuario;
             }
             else
             {
-                ViewBag.Seguidor = 0;
+                ViewBag.Seguidor = false;
+                Console.WriteLine("Nulooooooooooooooooooooooooooooooooooo");
             }
 
             ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
