@@ -4,8 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<div class="row align-items-center justify-content-between">
-
+<form asp-controller="Usuario" asp-action="Seguir" method="post" class="row align-items-center justify-content-between">
     <div class="col-auto">
         <div class="col-auto align-content-center">
             @if (Model.usuarioImagem != null)
@@ -14,7 +13,7 @@
             }
             else
             {
-                <i class="bi bi-person-circle post-img rounded-circle" style="width: 80px; height: 80px; object-fit: fill; color:white"></i>
+                <i class="bi bi-person-circle post-img rounded-circle fs-1" style="object-fit: cover; color:white"></i>
             }
         </div>
     </div>
@@ -25,19 +24,24 @@
         <h4>E-mail: @Model.usuarioEmail</h4>
     </div>
 
-
-    <div class="col-auto d-flex justify-content-center">
-        <a class="col-auto">
-            <i class="bi bi-person-plus-fill w-25" style="width:60px; object-fit: fill;"></i>
-        </a>
-    </div>
-</div>
+    @if (ViewBag.Seguidor != 0)
+    {
+        // Se já estiver seguindo, não mostrar o botão de seguir
+    }
+    else
+    {
+        <div class="col-auto d-flex justify-content-center">
+            <button type="submit" name="id" value="@Model.usuarioId" class="btn btn-primary">
+                <i class="bi bi-person-plus-fill post-img rounded-circle fs-1" style="object-fit: cover;"></i> Seguir
+            </button>
+        </div>
+    }
+</form>
 
 <hr />
 
 <div class="container">
-    <div class=" row align-content-stretch">
-
+    <div class="row align-content-stretch">
         @foreach (var post in ViewBag.Posts)
         {
             @if (post.usuarioId == Model.usuarioId && post.postStatus == "1")
