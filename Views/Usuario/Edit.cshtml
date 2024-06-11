@@ -34,22 +34,22 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="usuarioNome" class="control-label"></label>
-                    <input asp-for="usuarioNome" class="form-control" />
+                    <input asp-for="usuarioNome" class="form-control" required/>
                     <span asp-validation-for="usuarioNome" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="usuarioTelefone" class="control-label"></label>
-                    <input asp-for="usuarioTelefone" class="form-control" />
+                    <input asp-for="usuarioTelefone" type="number" class="form-control" />
                     <span asp-validation-for="usuarioTelefone" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="usuarioEmail" class="control-label"></label>
-                    <input asp-for="usuarioEmail" class="form-control" />
+                    <input asp-for="usuarioEmail" type="email" class="form-control" required />
                     <span asp-validation-for="usuarioEmail" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="usuarioSenha" class="control-label"></label>
-                    <input asp-for="usuarioSenha" class="form-control" />
+                    <input asp-for="usuarioSenha" type="password" class="form-control" required />
                     <span asp-validation-for="usuarioSenha" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -59,7 +59,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="usuarioCPF" class="control-label"></label>
-                    <input asp-for="usuarioCPF" class="form-control" />
+                    <input asp-for="usuarioCPF" type="number" class="form-control" />
                     <span asp-validation-for="usuarioCPF" class="text-danger"></span>
                 </div>
             </div>

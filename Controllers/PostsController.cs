@@ -92,8 +92,6 @@ namespace projetoRedeSocial.Controllers
                     }
                     post.postArquivo = "/uploads/" + uniqueFileName;
                 }
-                Comentarios comentarios = new Comentarios();
-                _context.comentarios.Add(comentarios);
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(HomePost));
