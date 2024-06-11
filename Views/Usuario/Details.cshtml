@@ -5,7 +5,6 @@
 }
 
 <div class="row align-items-center justify-content-between">
-
     <div class="col-auto">
         <div class="col-auto align-content-center">
             @if (Model.usuarioImagem != null)
@@ -14,7 +13,7 @@
             }
             else
             {
-                <i class="bi bi-person-circle post-img rounded-circle" style="width: 80px; height: 80px; object-fit: fill; color:white"></i>
+                <i class="bi bi-person-circle post-img rounded-circle fs-1" style="object-fit: cover; color:white"></i>
             }
         </div>
     </div>
@@ -25,19 +24,29 @@
         <h4>E-mail: @Model.usuarioEmail</h4>
     </div>
 
+    @if (ViewBag.Seguidor != 0)
+    {
+        <form asp-controller="Usuario" asp-action="DeixarDeSeguir" method="post" class="col-auto d-flex justify-content-center">
+            <button type="submit" name="id" value="@Model.usuarioId" class="btn btn-primary d-flex align-items-center" style="border-radius:100%">
+                <i class="bi bi-person-dash-fill display-6"></i
+            </button>
+        </form>
+    }
+    else
+    {
 
-    <div class="col-auto d-flex justify-content-center">
-        <a class="col-auto">
-            <i class="bi bi-person-plus-fill w-25" style="width:60px; object-fit: fill;"></i>
-        </a>
-    </div>
+        <form asp-controller="Usuario" asp-action="Seguir" method="post" class="col-auto d-flex justify-content-center">
+            <button type="submit" name="id" value="@Model.usuarioId" class="btn btn-primary d-flex align-items-center" style="border-radius:100%">
+                <i class="bi bi-person-plus-fill display-6"></i>
+            </button>
+        </form>
+    }
 </div>
 
 <hr />
 
 <div class="container">
-    <div class=" row align-content-stretch">
-
+    <div class="row align-content-stretch">
         @foreach (var post in ViewBag.Posts)
         {
             @if (post.usuarioId == Model.usuarioId && post.postStatus == "1")

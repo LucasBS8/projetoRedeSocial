@@ -13,11 +13,11 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/projetoRedeSocial.styles.css" asp-append-version="true" />
 </head>
-<body class="m-0 bg-dark">
+<body class="bg-dark p-0 m">
 
-    <div class="row min-vh-100">
-        <div class="col-auto">
-            <div class=" min-vh-100 d-flex flex-column flex-shrink-0 p-3 text-white bg-primary" style="border-top-right-radius:20px; border-bottom-right-radius:20px">
+    <div class="d-flex row min-vh-100">
+        <div class="col-auto min-vh-100">
+            <div class="min-vh-100 d-flex flex-column flex-shrink-0 text-white bg-primary" style="border-top-right-radius:20px; border-bottom-right-radius:20px">
                 <a href="/" class="d-flex align-self-center text-white text-decoration-none">
                     <h1>NexHub</h1>
                 </a>
@@ -51,11 +51,10 @@
             </div>
 
         </div>
-        <div class="row col min-vh-100">
-            <main role="main" class=" min-vh-100 flex-column align-self-center  text-white">
+            <div role="main" class="col text-white">
                 @RenderBody()
-            </main>
-        </div>
+            </div>
+
     </div>
 
 

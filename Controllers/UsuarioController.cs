@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using projetoRedeSocial.Models;
@@ -94,6 +95,44 @@ namespace projetoRedeSocial.Controllers
                           Problem("Entity set 'Contexto.usuario'  is null.");
         }
 
+        [HttpPost]
+        public IActionResult Seguir(int id)
+        {
+            int idUsuarioSeguidor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            if (idUsuarioSeguidor != id)
+            {
+                Seguidores seguidores = new Seguidores()
+                {
+                    idUsuario = id,
+                    idUsuarioSeguidor = idUsuarioSeguidor,
+                };
+                _context.seguidores.Add(seguidores);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Details), new {id = id });
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult DeixarDeSeguir(int id)
+        {
+            int idUsuarioSeguidor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            var seguidor = _context.seguidores
+                .FirstOrDefault(s => s.idUsuario == id && s.idUsuarioSeguidor == idUsuarioSeguidor);
+
+            if (seguidor != null)
+            {
+                _context.seguidores.Remove(seguidor);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Details), new { id = id });
+            }
+
+            return View();
+        }
+
+
+
         // GET: Usuario/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -101,15 +140,26 @@ namespace projetoRedeSocial.Controllers
             {
                 return NotFound();
             }
+            int valor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            ViewBag.UsuarioId = valor;
+            Seguidores seguidores = _context.seguidores.FirstOrDefault(s => s.idUsuario == id && s.idSeguidor == valor);
+            if (seguidores != null)
+            {
+                ViewBag.Seguidor = seguidores.idUsuario;
+            }
+            else
+            {
+                ViewBag.Seguidor = 0;
+            }
+
             ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
             var usuario = await _context.usuario
-            
+           
                 .FirstOrDefaultAsync(m => m.usuarioId == id);
             if (usuario == null)
             {
                 return NotFound();
             }
-
             return View(usuario);
         }
 
