@@ -35,10 +35,45 @@ namespace projetoRedeSocial.Controllers
             return View(await contexto.ToListAsync());
         }
 
+
+        [HttpPost]
+        public IActionResult Curtir(int id)
+        {
+            int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            var curtida = _context.curtidas.FirstOrDefault(c => c.idPost == id && c.idUsuario == userId);
+
+            if (curtida == null)
+            {
+                Curtidas novaCurtida = new()
+                {
+                    idPost = id,
+                    idUsuario = userId
+                };
+                _context.curtidas.Add(novaCurtida);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        [HttpPost]
+        public IActionResult Descurtir(int id)
+        {
+            int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            var curtida = _context.curtidas.FirstOrDefault(c => c.idPost == id && c.idUsuario == userId);
+
+            if (curtida != null)
+            {
+                _context.curtidas.Remove(curtida);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-
             if (id == null || _context.post == null)
             {
                 return NotFound();
@@ -52,8 +87,13 @@ namespace projetoRedeSocial.Controllers
                 return NotFound();
             }
 
+            int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            ViewBag.userId = userId;
+            ViewBag.Curtida = _context.curtidas.Any(c => c.idPost == id && c.idUsuario == userId);
+
             return View(post);
         }
+
 
         // GET: Posts/Create
         public IActionResult Create()

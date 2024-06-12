@@ -1,11 +1,9 @@
 ﻿@model projetoRedeSocial.Models.Post
 
 @{
-
     ViewData["Title"] = "Details";
 }
 
-@* ViewData["usuario"] *@
 <div class="row align-items-center">
     <div class="col row align-items-center">
         <a asp-controller="Usuario" asp-action="Details" asp-route-id="@Model.usuarioPost?.usuarioId">
@@ -22,14 +20,41 @@
     </div>
 
     <div class="col d-flex align-items-center justify-content-end">
-        <i class="bi bi-hand-thumbs-up-fill h1 p-3" style="color:white"></i>
+        @if (ViewBag.userId == Model.usuarioPost?.usuarioId)
+        {
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-gear"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.postId">Editar</a></li>
+                    <li>
+                        <form asp-action="Delete" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@Model.postId" />
+                            <button type="submit" class="dropdown-item">Excluir</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        }
+
+        @if (ViewBag.Curtida)
+        {
+            <form asp-controller="Posts" asp-action="Descurtir" method="post" style="display:inline;">
+                <input type="hidden" name="id" value="@Model.postId" />
+                <button type="submit" class="btn btn-danger"><i class="bi bi-hand-thumbs-down-fill"></i></button>
+            </form>
+        }
+        else
+        {
+            <form asp-controller="Posts" asp-action="Curtir" method="post" style="display:inline;">
+                <input type="hidden" name="id" value="@Model.postId" />
+                <button type="submit" class="btn btn-primary"><i class="bi bi-hand-thumbs-up-fill"></i></button>
+            </form>
+        }
     </div>
 </div>
 
-
-@* <dd class="col-sm-10">
-    @Html.DisplayFor(model => model.usuarioPost.usuarioId)
-</dd> *@
 @if (!string.IsNullOrEmpty(Model.postArquivo))
 {
     <div class=" row d-flex justify-content-lg-around align-items-center ">
@@ -70,32 +95,3 @@ else
     </div>
     <hr />
 }
-
-<div class="column">
-    <div class="col row align-items-center">
-        <a asp-controller="Usuario" asp-action="Details" asp-route-id="@Model.usuarioPost?.usuarioId">
-            @if (Model.usuarioPost?.usuarioImagem != null)
-            {
-                <img src="@Url.Content(Model.usuarioPost.usuarioImagem)" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" />
-            }
-            else
-            {
-                <i class="fs-1 bi bi-person-circle rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" style="color:white"></i>
-            }
-            <span class="fs-4 ms-3 d-none d-sm-inline h1">@Model.usuarioPost?.usuarioNome</span>
-        </a>
-    </div>
-    <div>
-        <p>
-            @Html.DisplayFor(model => model.postTitulo)
-        </p>
-    </div>
-
-</div>
-
-
-
-@* <div>
-    <a asp-action="Edit" asp-route-id="@Model?.postId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div> *@
