@@ -82,6 +82,11 @@ namespace projetoRedeSocial.Controllers
             var post = await _context.post
                 .Include(p => p.usuarioPost)
                 .FirstOrDefaultAsync(m => m.postId == id);
+            var comentarios = await _context.comentarios
+                .Include(p => p.postComentario)
+                .Where(m => m.postId == id)
+                .ToListAsync();
+
             if (post == null)
             {
                 return NotFound();
@@ -91,7 +96,39 @@ namespace projetoRedeSocial.Controllers
             ViewBag.userId = userId;
             ViewBag.Curtida = _context.curtidas.Any(c => c.idPost == id && c.idUsuario == userId);
 
+            ViewData["Comentarios"] = comentarios;
             return View(post);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AdicionarComentario(int postId, string comentario)
+        {
+            ViewBag.userId = HttpContext.Session.GetString("UserId");
+            // Verifique se o post existe
+            var post = await _context.post.FindAsync(postId);
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            // Crie uma nova instância de Comentarios
+            var novoComentario = new Comentarios
+            {
+                usuarioId = int.Parse(ViewBag.userId),
+                postId = postId,
+                comentario = comentario,
+                data = DateTime.Now.ToString()
+            };
+
+            // Adicione o novo comentário ao contexto
+            _context.comentarios.Add(novoComentario);
+
+            // Salve as mudanças no banco de dados
+            await _context.SaveChangesAsync();
+
+            // Redirecione de volta para a página de detalhes do post
+            return RedirectToAction("Details", "Posts", new { id = postId });
         }
 
 

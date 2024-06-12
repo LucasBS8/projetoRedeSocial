@@ -95,3 +95,29 @@ else
     </div>
     <hr />
 }
+
+<form asp-action="AdicionarComentario" method="post">
+    <input type="hidden" name="postId" value="@Model.postId" />
+
+    <div class="form-group">
+        <label for="comentario">Adicionar Comentário:</label>
+        <textarea class="form-control" id="comentario" name="comentario" rows="3"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enviar Comentário</button>
+</form>
+
+@if (ViewData["Comentarios"] != null && ((List<Comentarios>)ViewData["Comentarios"]).Any())
+{
+    <hr />
+    <h4>Comentários:</h4>
+    @foreach (var comentario in (List<Comentarios>)ViewData["Comentarios"])
+    {
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">@comentario.usuarioComentario.usuarioNome</h5>
+                <p class="card-text">@comentario.comentario</p>
+            </div>
+        </div>
+    }
+}

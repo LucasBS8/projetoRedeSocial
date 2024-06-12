@@ -2,4 +2,4 @@
 
 use redeSocialDB;
 
-select * from seguidores;
+select * from comentarios;
