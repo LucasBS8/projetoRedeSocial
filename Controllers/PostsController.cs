@@ -83,9 +83,10 @@ namespace projetoRedeSocial.Controllers
                 .Include(p => p.usuarioPost)
                 .FirstOrDefaultAsync(m => m.postId == id);
             var comentarios = await _context.comentarios
-                .Include(p => p.postComentario)
+                .Include(c => c.usuarioComentario) // Inclua o relacionamento com o usuário que fez o comentário
                 .Where(m => m.postId == id)
                 .ToListAsync();
+
 
             if (post == null)
             {
