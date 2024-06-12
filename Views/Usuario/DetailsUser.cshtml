@@ -29,6 +29,20 @@
     <div class="col-auto align-items-center p-4">
         <a asp-controller="Usuario" asp-action="Edit" asp-route-id="@Model.usuarioId" class="btn btn-primary">Editar</a>
     </div>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-gear"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.usuarioId">Editar</a></li>
+            <li>
+                <form asp-action="Delete" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@Model.usuarioId" />
+                    <button type="submit" class="dropdown-item">Excluir</button>
+                </form>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <hr />
