@@ -108,7 +108,6 @@ namespace projetoRedeSocial.Controllers
                 };
                 _context.seguidores.Add(seguidores);
                 _context.SaveChanges();
-                Console.WriteLine("---------------------------------Seguir----------------------------------------");
                 return RedirectToAction(nameof(Details), new { id });
             }
 
@@ -126,7 +125,6 @@ namespace projetoRedeSocial.Controllers
             {
                 _context.seguidores.Remove(seguidor);
                 _context.SaveChanges();
-                Console.WriteLine("---------------------------------Remove----------------------------------------");
                 return RedirectToAction(nameof(Details), new { id });
             }
 
@@ -144,28 +142,19 @@ namespace projetoRedeSocial.Controllers
             }
             int valor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             ViewBag.UsuarioId = valor;
-            Seguidores? seguidores;
-            seguidores = _context.seguidores.FirstOrDefault(s => s.idUsuario == id && s.idSeguidor == valor);
-            if (seguidores != null)
-            {
-                ViewBag.Seguidor = seguidores.idUsuario;
-            }
-            else
-            {
-                ViewBag.Seguidor = false;
-                Console.WriteLine("Nulooooooooooooooooooooooooooooooooooo");
-            }
+            Seguidores? seguidores = _context.seguidores.FirstOrDefault(s => s.idUsuario == id && s.idUsuarioSeguidor == valor);
+
+            ViewBag.Seguidor = seguidores != null;
 
             ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
-            var usuario = await _context.usuario
-           
-                .FirstOrDefaultAsync(m => m.usuarioId == id);
+            var usuario = await _context.usuario.FirstOrDefaultAsync(m => m.usuarioId == id);
             if (usuario == null)
             {
                 return NotFound();
             }
             return View(usuario);
         }
+
 
         // GET: Usuario/Details/5
         public async Task<IActionResult> DetailsUser(int? id)

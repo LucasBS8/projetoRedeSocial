@@ -24,7 +24,7 @@
         <h4>E-mail: @Model.usuarioEmail</h4>
     </div>
 
-    @if (ViewBag.Seguidor != false)
+    @if (ViewBag.Seguidor)
     {
         <form asp-controller="Usuario" asp-action="DeixarDeSeguir" method="post" class="col-auto d-flex justify-content-center">
             <button type="submit" name="id" value="@Model.usuarioId" class="btn btn-primary d-flex align-items-center" style="border-radius:100%">
@@ -34,7 +34,6 @@
     }
     else
     {
-
         <form asp-controller="Usuario" asp-action="Seguir" method="post" class="col-auto d-flex justify-content-center">
             <button type="submit" name="id" value="@Model.usuarioId" class="btn btn-primary d-flex align-items-center" style="border-radius:100%">
                 <i class="bi bi-person-plus-fill display-6"></i>
@@ -47,9 +46,9 @@
 
 <div class="container">
     <div class="row align-content-stretch">
-        @foreach (var post in ViewBag.Posts)
+        @foreach (var post in ViewData["Posts"] as List<projetoRedeSocial.Models.Post>)
         {
-            @if (post.usuarioId == Model.usuarioId && post.postStatus == "1")
+            if (post.usuarioId == Model.usuarioId && post.postStatus == "1")
             {
                 <div class="col-auto">
                     <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.postId">
