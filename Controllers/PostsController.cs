@@ -57,7 +57,7 @@ namespace projetoRedeSocial.Controllers
         }
 
         [HttpPost]
-        public IActionResult Descurtir(int id)
+        public IActionResult Neutro(int id)
         {
             int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             var curtida = _context.curtidas.FirstOrDefault(c => c.idPost == id && c.idUsuario == userId);
@@ -83,10 +83,9 @@ namespace projetoRedeSocial.Controllers
                 .Include(p => p.usuarioPost)
                 .FirstOrDefaultAsync(m => m.postId == id);
             var comentarios = await _context.comentarios
-                .Include(c => c.usuarioComentario) // Inclua o relacionamento com o usuário que fez o comentário
+                .Include(c => c.usuarioComentario)
                 .Where(m => m.postId == id)
                 .ToListAsync();
-
 
             if (post == null)
             {
@@ -97,9 +96,13 @@ namespace projetoRedeSocial.Controllers
             ViewBag.userId = userId;
             ViewBag.Curtida = _context.curtidas.Any(c => c.idPost == id && c.idUsuario == userId);
 
+            // Contagem de curtidas
+            ViewBag.CurtidasCount = _context.curtidas.Count(c => c.idPost == id);
+
             ViewData["Comentarios"] = comentarios;
             return View(post);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -57,18 +57,19 @@
 
         @if (ViewBag.Curtida)
         {
-            <form asp-controller="Posts" asp-action="Descurtir" method="post" style="display:inline;">
+            <form asp-controller="Posts" asp-action="Neutro" method="post" style="display:inline;">
                 <input type="hidden" name="id" value="@Model.postId" />
-                <button type="submit" class="btn btn-danger"><i class="bi bi-hand-thumbs-down-fill"></i></button>
+                <button type="submit" class="btn btn-primary" style="border-radius:100%"><i class="bi bi-hand-thumbs-up-fill"></i></button>
             </form>
         }
         else
         {
             <form asp-controller="Posts" asp-action="Curtir" method="post" style="display:inline;">
                 <input type="hidden" name="id" value="@Model.postId" />
-                <button type="submit" class="btn btn-primary"><i class="bi bi-hand-thumbs-up-fill"></i></button>
+                <button type="submit" class="btn btn-info" style="border-radius:100%"><i class="bi bi-dash-circle"></i></button>
             </form>
         }
+        <span class="ms-3">@ViewBag.CurtidasCount Curtidas</span>
     </div>
 </div>
 
