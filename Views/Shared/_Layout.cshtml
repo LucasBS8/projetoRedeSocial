@@ -1,6 +1,4 @@
-﻿
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="utf-8" />
@@ -13,12 +11,12 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/projetoRedeSocial.styles.css" asp-append-version="true" />
 </head>
-<body class="bg-dark p-0 m">
+<body class="bg-dark p-0 m-0">
 
-    <div class="d-flex row min-vh-100">
-        <div class="col-auto min-vh-100">
-            <div class="min-vh-100 d-flex flex-column flex-shrink-0 text-white bg-primary" style="border-top-right-radius:20px; border-bottom-right-radius:20px">
-                <a href="/" class="d-flex align-self-center text-white text-decoration-none">
+    <div class="d-flex row h-100">
+        <div class="col-auto h-100">
+            <div class="pt-3 min-vh-100 d-flex flex-column flex-shrink-0 text-white bg-primary" style="border-top-right-radius:20px; border-bottom-right-radius:20px">
+                <a asp-controller="Posts" asp-action="HomePost" class="d-flex align-self-center text-white text-decoration-none">
                     <h1>NexHub</h1>
                 </a>
                 <hr>
@@ -51,7 +49,7 @@
             </div>
 
         </div>
-            <div role="main" class="col text-white">
+            <div role="main" class="col text-white min-vh-100">
                 @RenderBody()
             </div>
 
