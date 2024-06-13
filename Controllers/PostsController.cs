@@ -87,7 +87,9 @@ namespace projetoRedeSocial.Controllers
                 .Where(m => m.postId == id)
                 .ToListAsync();
 
-
+            var count = await _context.curtidas
+    .Where(c => c.idPost == postId)
+    .CountAsync();
             if (post == null)
             {
                 return NotFound();
@@ -307,7 +309,7 @@ namespace projetoRedeSocial.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return View(id);
+            return RedirectToAction(nameof(HomePost));
         }
 
         private bool PostExists(int id)

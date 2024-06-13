@@ -30,8 +30,6 @@
                     <li>
                         @{
                             @inject IHttpContextAccessor httpContextAccessor
-
-                            // Recuperar o cookie (por exemplo, em _Layout.cshtml)
                             var userIdCookie = httpContextAccessor.HttpContext.Request.Cookies["UserId"];
 
                             <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@userIdCookie" class="nav-link text-white">
@@ -45,6 +43,12 @@
                             <i class="fs-5 bi bi-plus-circle"></i><span class="fs-4 ms-3 d-none d-sm-inline">Criar post</span>
                         </a>
                     </li>
+                    <li>
+                        <a asp-controller="Usuario" asp-action="Login" method="post" class="nav-link  text-white">
+                                <i class="fs-5 bi bi-box-arrow-left"></i><span class="fs-4 ms-3 d-none d-sm-inline">Sair</span>
+                        </a>
+                    </li>
+
                 </ul>
             </div>
 
