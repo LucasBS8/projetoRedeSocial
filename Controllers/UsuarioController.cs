@@ -163,18 +163,27 @@ namespace projetoRedeSocial.Controllers
             {
                 return NotFound();
             }
-            ViewData["Users"] = _context.usuario.ToList();
-            ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
-            var usuario = await _context.usuario
+            int valor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            ViewBag.UsuarioId = valor;
+            Seguidores? seguidores = _context.seguidores.FirstOrDefault(s => s.idUsuario == id && s.idUsuarioSeguidor == valor);
 
-                .FirstOrDefaultAsync(m => m.usuarioId == id);
+            ViewBag.Seguidor = seguidores != null;
+
+            ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
+
+            var usuario = await _context.usuario.FirstOrDefaultAsync(m => m.usuarioId == id);
             if (usuario == null)
             {
                 return NotFound();
             }
 
+            var seguidoresIds = _context.seguidores.Where(s => s.idUsuarioSeguidor == id).Select(s => s.idUsuario).ToList();
+            var seguidoresUsuarios = _context.usuario.Where(u => seguidoresIds.Contains(u.usuarioId)).ToList();
+            ViewData["Seguidores"] = seguidoresUsuarios;
+
             return View(usuario);
         }
+
 
         // GET: Usuario/Create
         public IActionResult Create()

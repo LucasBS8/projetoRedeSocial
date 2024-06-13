@@ -61,7 +61,7 @@
                                 }
                                 else
                                 {
-                                    <video src="@Url.Content(post.postArquivo)" class="img-fluid rounded-video">
+                                    <video src="@Url.Content(post.postArquivo)" class="img-fluid rounded-img">
                                         Your browser does not support the video tag.
                                     </video>
                                 }
@@ -79,39 +79,5 @@
     </div>
 </div>
 
-<style>
-    .post-img {
-        border-radius: 30px;
-        margin: 10px;
-        text-align: center;
-        overflow: auto;
-    }
 
-    .post-card {
-        width: 198px;
-        height: 198px;
-        border: 1px solid #ddd;
-        border-radius: 30px;
-        margin: 10px;
-        text-align: center;
-        color: #fff;
-        overflow: hidden;
-    }
 
-    .post-title {
-        font-size: 1.2em;
-        margin-top: 20px;
-    }
-
-    .post-desc {
-        font-size: 1em;
-        margin: 10px 0;
-    }
-
-    .rounded-img, .rounded-video {
-        width: 198px;
-        height: 198px;
-        border-radius: 30px;
-        object-fit: cover;
-    }
-</style>

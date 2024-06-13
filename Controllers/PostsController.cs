@@ -78,7 +78,7 @@ namespace projetoRedeSocial.Controllers
             {
                 return NotFound();
             }
-
+            ViewBag.userId = HttpContext.Session.GetString("UserId");
             var post = await _context.post
                 .Include(p => p.usuarioPost)
                 .FirstOrDefaultAsync(m => m.postId == id);
@@ -200,17 +200,44 @@ namespace projetoRedeSocial.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("postId,usuarioId,postTitulo,postDesc,postArquivo,postCor,postDate,postStatus")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("usuarioId,postTitulo,postDesc,postCor,postDate,postStatus,postArquivo")] Post post, IFormFile? postArquivo)
         {
-            if (id != post.postId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var existingPost = await _context.post.AsNoTracking().FirstOrDefaultAsync(p => p.postId == id);
+
+                    if (postArquivo != null)
+                    {
+                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + postArquivo.FileName;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        Directory.CreateDirectory(uploadsFolder);
+
+                        
+                        if (!string.IsNullOrEmpty(existingPost?.postArquivo))
+                        {
+                            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existingPost.postArquivo.TrimStart('/'));
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+                            }
+                        }
+
+                        
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await postArquivo.CopyToAsync(fileStream);
+                        }
+                        post.postArquivo = "/uploads/" + uniqueFileName;
+                    }
+                    else
+                    {
+                        post.postArquivo = existingPost?.postArquivo;
+                    }
+
+                    post.postId = id;
                     _context.Update(post);
                     await _context.SaveChangesAsync();
                 }
@@ -230,6 +257,8 @@ namespace projetoRedeSocial.Controllers
             ViewData["usuarioId"] = new SelectList(_context.usuario, "usuarioId", "usuarioId", post.usuarioId);
             return View(post);
         }
+
+
 
         // GET: Posts/Delete/5
         public async Task<IActionResult> Delete(int? id)

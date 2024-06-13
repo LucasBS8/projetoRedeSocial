@@ -6,17 +6,34 @@
 
 <div class="row align-items-center">
     <div class="col row align-items-center">
-        <a asp-controller="Usuario" asp-action="Details" asp-route-id="@Model.usuarioPost?.usuarioId">
-            @if (Model.usuarioPost?.usuarioImagem != null)
-            {
-                <img src="@Url.Content(Model.usuarioPost.usuarioImagem)" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" />
-            }
-            else
-            {
-                <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
-            }
-            <span class="fs-4 ms-3 d-none d-sm-inline h1">@Model.usuarioPost?.usuarioNome</span>
-        </a>
+        @if (ViewBag.userId == Model.usuarioPost?.usuarioId)
+        {
+            <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@Model.usuarioPost?.usuarioId">
+                @if (Model.usuarioPost?.usuarioImagem != null)
+                {
+                    <img src="@Url.Content(Model.usuarioPost.usuarioImagem)" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" />
+                }
+                else
+                {
+                    <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
+                }
+                <span class="fs-4 ms-3 d-none d-sm-inline h1">@Model.usuarioPost?.usuarioNome</span>
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Usuario" asp-action="Details" asp-route-id="@Model.usuarioPost?.usuarioId">
+                @if (Model.usuarioPost?.usuarioImagem != null)
+                {
+                    <img src="@Url.Content(Model.usuarioPost.usuarioImagem)" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" />
+                }
+                else
+                {
+                    <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
+                }
+                <span class="fs-4 ms-3 d-none d-sm-inline h1">@Model.usuarioPost?.usuarioNome</span>
+            </a>
+        }
     </div>
 
     <div class="col d-flex align-items-center justify-content-end">

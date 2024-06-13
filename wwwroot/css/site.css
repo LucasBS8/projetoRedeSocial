@@ -24,3 +24,45 @@ body {
 .blur{
     filter:blur(4px)
 }
+
+.post-card {
+    animation-duration:0.0s;
+    width: 198px;
+    height: 198px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    margin: 10px;
+    text-align: center;
+    color: #fff;
+    overflow: hidden;
+}
+
+.post-title {
+    font-size: 1.2em;
+    margin-top: 20px;
+}
+
+.post-desc {
+    font-size: 1em;
+    margin: 10px 0;
+}
+
+.rounded-img{
+    width: 198px;
+    height: 198px;
+    border-radius: 30px;
+    object-fit: cover;
+}
+
+.description-container {
+    padding: 20px;
+    background-color: #333;
+    border-radius: 10px;
+}
+
+.post-img {
+    border-radius: 30px;
+    margin: 10px;
+    text-align: center;
+    overflow: auto;
+}

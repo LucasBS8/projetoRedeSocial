@@ -1,64 +1,83 @@
 ﻿@model projetoRedeSocial.Models.Post
 
 @{
+    Layout = "_LayoutVazio";
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<form class="w-100 p-5" asp-action="Edit" enctype="multipart/form-data">
+    <input asp-for="postDate" type="hidden" />
+    <input asp-for="usuarioId" type="hidden" />
 
-<h4>Post</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="postId" />
-            <div class="form-group">
-                <label asp-for="usuarioId" class="control-label"></label>
-                <select asp-for="usuarioId" class="form-control" asp-items="ViewBag.usuarioId"></select>
-                <span asp-validation-for="usuarioId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="postTitulo" class="control-label"></label>
-                <input asp-for="postTitulo" class="form-control" />
+    <div asp-validation-summary="ModelOnly" class="text-danger text-center"></div>
+    <div class="d-flex row justify-content-center">
+        <div class="col-5">
+            <h1 class="text-center display-2 fw-bold">Editar</h1>
+            <div class="form-group col-auto">
+                <label asp-for="postTitulo" class="control-label">Título</label>
+                <input asp-for="postTitulo" class="form-control" style="border-radius: 10px;" required />
                 <span asp-validation-for="postTitulo" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="postDesc" class="control-label"></label>
-                <input asp-for="postDesc" class="form-control" />
-                <span asp-validation-for="postDesc" class="text-danger"></span>
+
+            <div class="form-group  col-auto">
+                <label asp-for="postDesc" class="control-label">Descrição</label>
+                <textarea asp-for="postDesc" class="form-control" style="border-radius: 10px;"></textarea>
             </div>
-            <div class="form-group">
-                <label asp-for="postArquivo" class="control-label"></label>
-                <input asp-for="postArquivo" class="form-control" />
-                <span asp-validation-for="postArquivo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="postCor" class="control-label"></label>
-                <input asp-for="postCor" class="form-control" />
-                <span asp-validation-for="postCor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="postDate" class="control-label"></label>
-                <input asp-for="postDate" class="form-control" />
-                <span asp-validation-for="postDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="postStatus" class="control-label"></label>
-                <input asp-for="postStatus" class="form-control" />
+
+            <div class="form-group  col-auto">
+                <label asp-for="postStatus" class="control-label">Status</label>
+                <div class="form-check">
+                    <input asp-for="postStatus" type="radio" name="postStatus" value="0" class="form-check-input" required />
+                    <label class="form-check-label" for="postStatus">Privado</label>
+                </div>
+                <div class="form-check  col-auto">
+                    <input asp-for="postStatus" type="radio" name="postStatus" value="1" class="form-check-input" required />
+                    <label class="form-check-label" for="postStatus">Público</label>
+                </div>
                 <span asp-validation-for="postStatus" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label asp-for="postCor" class="control-label">Cor</label>
+                <input asp-for="postCor" type="color" class="form-control" style="width: 50px; height: 50px;" required />
+                <span asp-validation-for="postCor" class="text-danger"></span>
             </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+            <div class="form-group d-flex justify-content-between mt-4">
+                <a asp-action="HomePost" class="btn btn-outline-secondary w-50 me-2">Voltar</a>
+                <input type="submit" value="Salvar" class="btn btn-primary w-50 ms-2" />
+            </div>
+        </div>
+
+        <div class="col-5 d-flex flex-column justify-content-center align-items-center">
+            <img class="mb-4 w-75" id="selectedImage" src="@Url.Content(Model.postArquivo)" alt="example placeholder" style="object-fit: contain; border-radius: 30px" />
+            <div data-mdb-ripple-init class="btn btn-primary btn-rounded">
+                <label class="form-label text-white m-1" for="customFile1">Adicionar imagem</label>
+                <input asp-for="postArquivo" type="file" class="form-control d-none" id="customFile1" onchange="displaySelectedImage(event, 'selectedImage')" />
+                <span asp-validation-for="postArquivo" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function displaySelectedImage(event, elementId) {
+            const selectedImage = document.getElementById(elementId);
+            const fileInput = event.target;
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    selectedImage.src = e.target.result;
+                };
+
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+    </script>
 }

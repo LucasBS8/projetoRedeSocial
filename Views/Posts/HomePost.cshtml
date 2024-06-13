@@ -32,7 +32,7 @@
                                         }
                                         else
                                         {
-                                            <video src="@Url.Content(post.postArquivo)" class="img-fluid rounded-video">
+                                            <video src="@Url.Content(post.postArquivo)" class="img-fluid rounded-img">
                                                 Your browser does not support the video tag.
                                             </video>
                                         }
@@ -54,59 +54,46 @@
     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
         @foreach (var usuario in ViewBag.Usuario)
         {
-            <div class="d-flex flex-column">
-                <a asp-controller="Usuario" asp-action="Details" asp-route-id="@usuario.usuarioId" class="d-flex align-items-center justify-content-between link-offset-2 link-underline link-underline-opacity-0 py-2">
-                    <div class="align-items-center">
-                        @if (usuario.usuarioImagem != null)
-                        {
-                            <img src="@Url.Content(usuario.usuarioImagem)" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
-                        }
-                        else
-                        {
-                            <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
-                        }
-                        <span class="fs-4 ms-3 text-white">@usuario.usuarioNome</span>
-                    </div>
-                    <i class="bi bi-arrow-right text-white display-6" ></i>
-                </a>
-                <hr class="my-2" />
-            </div>
+            @if (usuario.usuarioId == Convert.ToInt64(ViewBag.userId))
+            {
+                <div class="d-flex flex-column">
+                    <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@usuario.usuarioId" class="d-flex align-items-center justify-content-between link-offset-2 link-underline link-underline-opacity-0 py-2">
+                        <div class="align-items-center">
+                            @if (usuario.usuarioImagem != null)
+                            {
+                                <img src="@Url.Content(usuario.usuarioImagem)" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
+                            }
+                            <span class="fs-4 ms-3 text-white">@usuario.usuarioNome</span>
+                        </div>
+                        <i class="bi bi-arrow-right text-white display-6"></i>
+                    </a>
+                    <hr class="my-2" />
+                </div>
+            }
+            else
+            {
+                <div class="d-flex flex-column">
+                    <a asp-controller="Usuario" asp-action="Details" asp-route-id="@usuario.usuarioId" class="d-flex align-items-center justify-content-between link-offset-2 link-underline link-underline-opacity-0 py-2">
+                        <div class="align-items-center">
+                            @if (usuario.usuarioImagem != null)
+                            {
+                                <img src="@Url.Content(usuario.usuarioImagem)" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
+                            }
+                            <span class="fs-4 ms-3 text-white">@usuario.usuarioNome</span>
+                        </div>
+                        <i class="bi bi-arrow-right text-white display-6"></i>
+                    </a>
+                    <hr class="my-2" />
+                </div>
+            }
         }
     </div>
-
-
-
-
 </div>
-
-
-
-<style>
-    .post-card {
-        width: 198px;
-        height: 198px;
-        border: 1px solid #ddd;
-        border-radius: 30px;
-        margin: 5px;
-        text-align: center;
-        color: #fff;
-        overflow: hidden;
-    }
-
-    .post-title {
-        font-size: 1.2em;
-        margin-top: 20px;
-    }
-
-    .post-desc {
-        font-size: 1em;
-        margin: 55px 0;
-    }
-
-    .rounded-img, .rounded-video {
-        width: 198px;
-        height: 198px;
-        border-radius: 30px;
-        object-fit: cover;
-    }
-</style>
