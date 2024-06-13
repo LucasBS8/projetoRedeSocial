@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,16 +19,9 @@ namespace projetoRedeSocial.Controllers
             _context = context;
         }
 
-        public Task<IActionResult> Login()
+        public ActionResult Login()
         {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            Response.Cookies.Delete("UserId");
-            HttpContext.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
-            HttpContext.Response.Headers["Pragma"] = "no-cache";
-            HttpContext.Response.Headers["Expires"] = "0";
-
-            return Task.FromResult<IActionResult>(View());
+            return View();
         }
 
         public ActionResult Cadastro()
@@ -72,20 +63,6 @@ namespace projetoRedeSocial.Controllers
                 TempData["Mensagem"] = "Erro: " + ex.Message;
                 return View("Login");
             }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            // Adicionar cabeçalhos para desabilitar o cache
-            HttpContext.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
-            HttpContext.Response.Headers["Pragma"] = "no-cache";
-            HttpContext.Response.Headers["Expires"] = "0";
-
-            return RedirectToAction("Usuario", "Login");
         }
 
         [HttpPost]

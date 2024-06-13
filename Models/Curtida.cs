@@ -24,8 +24,5 @@ namespace projetoRedeSocial.Models
         [Column("postCurtida")]
         [Display(Name = "Post curtido")]
         public Post? postCurtida { get; set; }
-
-
-
     }
 }
