@@ -308,12 +308,10 @@ namespace projetoRedeSocial.Controllers
             var usuario = await _context.usuario.FindAsync(id);
             if (usuario != null)
             {
-                // Busque todos os posts do usuário
                 var postsToDelete = _context.post.Where(p => p.usuarioId == id).ToList();
                 var seguidoresToDelete = _context.seguidores.Where(s => s.idUsuario == id).ToList();
                 var seguindoToDelete = _context.seguidores.Where(s => s.idUsuarioSeguidor == id).ToList();
 
-                // Exclua os posts
                 _context.post.RemoveRange(postsToDelete);
                 _context.seguidores.RemoveRange(seguidoresToDelete);
                 _context.seguidores.RemoveRange(seguindoToDelete);

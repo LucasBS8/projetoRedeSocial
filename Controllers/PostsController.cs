@@ -291,11 +291,23 @@ namespace projetoRedeSocial.Controllers
             var post = await _context.post.FindAsync(id);
             if (post != null)
             {
+                if (!string.IsNullOrEmpty(post.postArquivo))
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", post.postArquivo.TrimStart('/'));
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                }
+                var comentariosToDelete = _context.comentarios.Where(p => p.postId == id).ToList();
+                var curtidasToDelete = _context.curtidas.Where(p => p.idPost == id).ToList();
+                _context.comentarios.RemoveRange(comentariosToDelete);
+                _context.curtidas.RemoveRange(curtidasToDelete);
                 _context.post.Remove(post);
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return View(id);
         }
 
         private bool PostExists(int id)
