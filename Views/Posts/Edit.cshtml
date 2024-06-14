@@ -49,7 +49,16 @@
         </div>
 
         <div class="col-5 d-flex flex-column justify-content-center align-items-center">
-            <img class="mb-4 w-75" id="selectedImage" src="@Url.Content(Model.postArquivo)" alt="example placeholder" style="object-fit: contain; border-radius: 30px" />
+            @if (Model.postArquivo == null)
+            {
+                <img class="mb-4 w-75" id="selectedImage" src=@Url.Content("~/imgSistema/imagemAdd.png") alt="example placeholder" style="object-fit: contain; border-radius: 30px" />
+
+            }
+            else
+            {
+                <img class="mb-4 w-75" id="selectedImage" src="@Url.Content(Model.postArquivo)" alt="example placeholder" style="object-fit: contain; border-radius: 30px" />
+            }
+
             <div data-mdb-ripple-init class="btn btn-primary btn-rounded">
                 <label class="form-label text-white m-1" for="customFile1">Adicionar imagem</label>
                 <input asp-for="postArquivo" type="file" class="form-control d-none" id="customFile1" onchange="displaySelectedImage(event, 'selectedImage')" />

@@ -17,11 +17,14 @@ namespace projetoRedeSocial.Models
         [Display(Name = "post do usuario")]
         public Usuario? usuarioPost { get; set; }
 
+        [Required(ErrorMessage = "O título é obrigatório")]
+        [StringLength(20, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
         [Column("postTitulo")]
         [Display(Name = "Título")]
         public string? postTitulo { get; set; }
 
         [Column("postDesc")]
+        [StringLength(200, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
         [Display(Name = "Descrição")]
         public string? postDesc { get; set; }
 
@@ -29,6 +32,7 @@ namespace projetoRedeSocial.Models
         [Display(Name = "Arquivo")]
         public string? postArquivo { get; set; }
 
+        [Required(ErrorMessage = "A cor é obrigatória")]
         [Column("postCor")]
         [Display(Name = "Cor")]
         public string? postCor { get; set; }
