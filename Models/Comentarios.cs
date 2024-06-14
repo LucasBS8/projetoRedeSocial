@@ -25,6 +25,7 @@ namespace projetoRedeSocial.Models
         [Display(Name = "Comentario do post")]
         public Post? postComentario { get; set; }
 
+        [StringLength(60, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
         [Column("comentario")]
         [Display(Name = "Comentário")]
         public string? comentario { get; set; }

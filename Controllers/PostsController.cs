@@ -145,31 +145,46 @@ namespace projetoRedeSocial.Controllers
         // POST: Posts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Posts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("postId,postTitulo,postDesc,postCor,postStatus")] Post post, IFormFile? postArquivo)
         {
             post.usuarioId = int.Parse(HttpContext.Session.GetString("UserId"));
+            post.postDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             if (ModelState.IsValid)
             {
                 if (postArquivo != null)
                 {
-                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + postArquivo.FileName;
-                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                    Directory.CreateDirectory(uploadsFolder);
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    if (postArquivo.Length > 0)
                     {
-                        await postArquivo.CopyToAsync(fileStream);
+                        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".mp4" };
+                        var extension = Path.GetExtension(postArquivo.FileName).ToLower();
+                        if (!allowedExtensions.Contains(extension))
+                        {
+                            ModelState.AddModelError("postArquivo", "Apenas arquivos (.jpg, .jpeg, .png, .gif e .mp4) são permitidos.");
+                            return View(post);
+                        }
+
+                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + postArquivo.FileName;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                        Directory.CreateDirectory(uploadsFolder);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await postArquivo.CopyToAsync(fileStream);
+                        }
+                        post.postArquivo = "/uploads/" + uniqueFileName;
                     }
-                    post.postArquivo = "/uploads/" + uniqueFileName;
                 }
+
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(HomePost));
             }
             return View(post);
         }
+
 
 
         // GET: Posts/Edit/5
@@ -209,7 +224,14 @@ namespace projetoRedeSocial.Controllers
                         var filePath = Path.Combine(uploadsFolder, uniqueFileName);
                         Directory.CreateDirectory(uploadsFolder);
 
-                        
+                        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".mp4" };
+                        var extension = Path.GetExtension(postArquivo.FileName).ToLower();
+                        if (!allowedExtensions.Contains(extension))
+                        {
+                            ModelState.AddModelError("postArquivo", "Apenas arquivos (.jpg, .jpeg, .png, .gif e .mp4) são permitidos.");
+                            return View(post);
+                        }
+
                         if (!string.IsNullOrEmpty(existingPost?.postArquivo))
                         {
                             var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existingPost.postArquivo.TrimStart('/'));
@@ -219,7 +241,6 @@ namespace projetoRedeSocial.Controllers
                             }
                         }
 
-                        
                         using (var fileStream = new FileStream(filePath, FileMode.Create))
                         {
                             await postArquivo.CopyToAsync(fileStream);
@@ -246,7 +267,7 @@ namespace projetoRedeSocial.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(HomePost));
             }
             ViewData["usuarioId"] = new SelectList(_context.usuario, "usuarioId", "usuarioId", post.usuarioId);
             return View(post);

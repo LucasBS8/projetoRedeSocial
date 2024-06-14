@@ -13,10 +13,12 @@ namespace projetoRedeSocial.Models
         [Display(Name = "Perfil")]
         public string? usuarioImagem { get; set; }
 
+        [StringLength(100, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
         [Column("usuarioDesc")]
         [Display(Name = "Descrição")]
         public string? usuarioDesc { get; set; }
 
+        [StringLength(10, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
         [Column("usuarioNome")]
         [Display(Name = "Nome")]
         public string? usuarioNome { get; set; }
@@ -29,10 +31,12 @@ namespace projetoRedeSocial.Models
         [Display(Name = "E-mail")]
         public string? usuarioEmail { get; set; }
 
+        [StringLength(10, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
         [Column("usuarioSenha")]
         [Display(Name = "Senha")]
         public string? usuarioSenha { get; set; }
 
+        [StringLength(20, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
         [Column("usuarioEndereco")]
         [Display(Name = "Endereço")]
         public string? usuarioEndereco { get; set; }
