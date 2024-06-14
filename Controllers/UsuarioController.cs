@@ -21,30 +21,10 @@ namespace projetoRedeSocial.Controllers
             _context = context;
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
+        public ActionResult Login()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            // Adicionar cabeçalhos para desabilitar o cache
-            HttpContext.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
-            HttpContext.Response.Headers["Pragma"] = "no-cache";
-            HttpContext.Response.Headers["Expires"] = "0";
-
-            return RedirectToAction("Usuario", "Login");
-        }
-
-        public Task<IActionResult> Login()
-        {
-            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            Response.Cookies.Delete("UserId");
-            HttpContext.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
-            HttpContext.Response.Headers["Pragma"] = "no-cache";
-            HttpContext.Response.Headers["Expires"] = "0";
-
-            return Task.FromResult<IActionResult>(View());
+            return View();
         }
 
         public ActionResult Cadastro()
@@ -64,12 +44,8 @@ namespace projetoRedeSocial.Controllers
 
                     if (user != null)
                     {
-                        // Definir o cookie (por exemplo, após o login)
                         Response.Cookies.Append("UserId", user.usuarioId.ToString());
-
-
                         HttpContext.Session.SetString("UserId", user.usuarioId.ToString());
-                        // Authentication logic here
                         return RedirectToAction("HomePost", "Posts");
                     }
                     else
@@ -267,17 +243,11 @@ namespace projetoRedeSocial.Controllers
                         var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
                         var uniqueFileName = Guid.NewGuid().ToString() + "_" + usuarioImagem.FileName;
                         var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                        // Certifique-se de que o diretório existe
                         Directory.CreateDirectory(uploadsFolder);
-
-                        // Salvar o arquivo no servidor
                         using (var fileStream = new FileStream(filePath, FileMode.Create))
                         {
                             await usuarioImagem.CopyToAsync(fileStream);
                         }
-
-                        // Atualizar o caminho da imagem no objeto usuario
                         usuario.usuarioImagem = "/uploads/" + uniqueFileName;
                     }
 
@@ -295,7 +265,7 @@ namespace projetoRedeSocial.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("HomePost", "Posts");
             }
             return View(usuario);
         }
@@ -343,7 +313,7 @@ namespace projetoRedeSocial.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Login));
         }
 
         private bool UsuarioExists(int id)
