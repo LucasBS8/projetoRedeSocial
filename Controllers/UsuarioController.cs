@@ -272,6 +272,7 @@ namespace projetoRedeSocial.Controllers
 
 
         // GET: Usuario/Delete/5
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.usuario == null)
@@ -290,7 +291,7 @@ namespace projetoRedeSocial.Controllers
         }
 
         // POST: Usuario/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -304,17 +305,22 @@ namespace projetoRedeSocial.Controllers
                 var postsToDelete = _context.post.Where(p => p.usuarioId == id).ToList();
                 var seguidoresToDelete = _context.seguidores.Where(s => s.idUsuario == id).ToList();
                 var seguindoToDelete = _context.seguidores.Where(s => s.idUsuarioSeguidor == id).ToList();
+                var comentariosToDelete = _context.comentarios.Where(c => c.usuarioId == id).ToList();
+                var curtidasToDelete = _context.curtidas.Where(c => c.idUsuario == id).ToList();
 
+                _context.curtidas.RemoveRange(curtidasToDelete);
+                _context.comentarios.RemoveRange(comentariosToDelete);
                 _context.post.RemoveRange(postsToDelete);
                 _context.seguidores.RemoveRange(seguidoresToDelete);
                 _context.seguidores.RemoveRange(seguindoToDelete);
                 _context.usuario.Remove(usuario);
                 _context.SaveChanges();
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Login));
         }
+
 
         private bool UsuarioExists(int id)
         {

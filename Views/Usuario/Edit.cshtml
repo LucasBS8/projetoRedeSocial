@@ -67,7 +67,7 @@
                     <input type="submit" value="Save" class="btn btn-primary" />
                 </div>
                 <div>
-                    <a asp-controller="Usuario" asp-action="DetailsUser">Back to List</a>
+                    <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@Model.usuarioId">Back to List</a>
                 </div>
             </div>
         </form>

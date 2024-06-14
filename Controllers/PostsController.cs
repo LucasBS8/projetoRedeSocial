@@ -254,25 +254,6 @@ namespace projetoRedeSocial.Controllers
 
 
 
-        // GET: Posts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.post == null)
-            {
-                return NotFound();
-            }
-
-            var post = await _context.post
-                .Include(p => p.usuarioPost)
-                .FirstOrDefaultAsync(m => m.postId == id);
-            if (post == null)
-            {
-                return NotFound();
-            }
-
-            return View(post);
-        }
-
         // POST: Posts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -301,7 +282,7 @@ namespace projetoRedeSocial.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return View(id);
+            return RedirectToAction(nameof(HomePost));
         }
 
         private bool PostExists(int id)

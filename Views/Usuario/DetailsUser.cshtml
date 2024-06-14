@@ -29,7 +29,7 @@
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
             <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.usuarioId">Editar</a></li>
             <li>
-                <form asp-action="Delete" method="post" style="display:inline;">
+                <form asp-action="DeleteConfirmed" method="post" style="display:inline;">
                     <input type="hidden" name="id" value="@Model.usuarioId" />
                     <button type="submit" class="dropdown-item">Excluir</button>
                 </form>
