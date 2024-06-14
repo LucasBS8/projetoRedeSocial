@@ -18,7 +18,7 @@ namespace projetoRedeSocial.Models
         [Display(Name = "Descrição")]
         public string? usuarioDesc { get; set; }
 
-        [StringLength(10, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
+        [StringLength(20, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
         [Column("usuarioNome")]
         [Display(Name = "Nome")]
         public string? usuarioNome { get; set; }
@@ -32,6 +32,7 @@ namespace projetoRedeSocial.Models
         public string? usuarioEmail { get; set; }
 
         [StringLength(10, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$", ErrorMessage = "A senha deve conter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas e pelo menos um número.")]
         [Column("usuarioSenha")]
         [Display(Name = "Senha")]
         public string? usuarioSenha { get; set; }

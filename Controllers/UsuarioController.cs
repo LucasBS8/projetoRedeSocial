@@ -76,6 +76,19 @@ namespace projetoRedeSocial.Controllers
                     return RedirectToAction("Login");
                 }
 
+                foreach (var state in ModelState.Values)
+                {
+                    foreach (var error in state.Errors)
+                    {
+                        TempData["Mensagem"] = error.ErrorMessage;
+                    }
+                }
+
+                return View("Cadastro");
+            }
+            catch (DbUpdateException dbEx)
+            {
+                TempData["Mensagem"] = "Erro: " + dbEx.Message;
                 return View("Cadastro");
             }
             catch (Exception ex)
@@ -84,6 +97,7 @@ namespace projetoRedeSocial.Controllers
                 return View("Cadastro");
             }
         }
+
 
 
         // GET: Usuario
@@ -254,21 +268,31 @@ namespace projetoRedeSocial.Controllers
                     _context.Update(usuario);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    if (!UsuarioExists(usuario.usuarioId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+
+                    TempData["Mensagem"] = "Erro ao salvar as alterações. Outro usuário pode ter modificado esses dados. Tente novamente.";
+                    return View(usuario);
+                }
+                catch (Exception ex)
+                {
+
+                    TempData["Mensagem"] = "Ocorreu um erro inesperado. Tente novamente mais tarde.";
+                    return View(usuario);
                 }
                 return RedirectToAction("HomePost", "Posts");
             }
+
+            foreach (var state in ModelState.Values)
+            {
+                foreach (var error in state.Errors)
+                {
+                    TempData["Mensagem"] += error.ErrorMessage + "<br>";
+                }
+            }
             return View(usuario);
         }
+
 
 
         // GET: Usuario/Delete/5

@@ -10,6 +10,14 @@
 
         <h1 class="text-center">NexHub</h1>
         <h3 class="text-center">Cadastro</h3>
+
+        @if (TempData["Mensagem"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @TempData["Mensagem"]
+            </div>
+        }
+
         <div class="mb-3">
             <label class="form-label pt-3">Nome</label>
             <input asp-for="usuarioNome" type="text" class="form-control" placeholder="Nome">
@@ -26,3 +34,4 @@
         </div>
     </form>
 </div>
+
