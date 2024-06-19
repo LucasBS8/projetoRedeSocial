@@ -4,8 +4,8 @@
     ViewData["Title"] = "Details";
 }
 
-<div class="row align-items-center">
-    <div class="col row align-items-center">
+<div class="row align-items-center text-white ">
+    <div class="col row align-items-center ">
         @if (ViewBag.userId == Model.usuarioPost?.usuarioId)
         {
             <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@Model.usuarioPost?.usuarioId">
@@ -87,11 +87,11 @@
 
             @if (!Model.postArquivo.Contains(".mp4"))
             {
-                <img src="@Url.Content(Model.postArquivo)" class="post-img" />
+                <img src="@Url.Content(Model.postArquivo)" class="post-img" style="object-fit:cover"/>
             }
             else
             {
-                <video src="@Url.Content(Model.postArquivo)" class="post-img">
+                <video src="@Url.Content(Model.postArquivo)" class="post-img" style="object-fit:cover">
                     Your browser does not support the video tag.
                 </video>
             }
@@ -131,7 +131,7 @@ else
     <h4>Comentários:</h4>
     @foreach (var comentario in (List<Comentarios>)ViewData["Comentarios"])
     {
-        <div class="card">
+        <div class="card bg-dark text-white">
             <div class="card-body">
                 <h5 class="card-title">@comentario.usuarioComentario.usuarioNome</h5>
                 <p class="card-text">@comentario.comentario</p>
