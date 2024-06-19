@@ -3,6 +3,11 @@
     "secrets1": {
       "type": "secrets",
       "dynamicId": null
+    },
+    "sqlite1": {
+      "type": "sqlite",
+      "connectionId": "ConnectionStrings:ChaveDB",
+      "dynamicId": null
     }
   }
 }

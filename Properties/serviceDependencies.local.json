@@ -3,6 +3,12 @@
     "secrets1": {
       "type": "secrets.user",
       "dynamicId": null
+    },
+    "sqlite1": {
+      "secretStore": "LocalSecretsFile",
+      "type": "sqlite.local",
+      "connectionId": "ConnectionStrings:ChaveDB",
+      "dynamicId": null
     }
   }
 }
