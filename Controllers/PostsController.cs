@@ -344,12 +344,7 @@ namespace projetoRedeSocial.Controllers
                     return NotFound();
                 }
 
-                // Verifica se o usuário é o autor do comentário ou tem permissões para excluir
-                if (userId != comentario.usuarioId)
-                {
-                    // Redireciona para uma página de erro ou uma ação adequada
-                    return RedirectToAction("AccessDenied", "Error");
-                }
+
 
                 // Remove o comentário do contexto e salva as alterações
                 _context.comentarios.Remove(comentario);
