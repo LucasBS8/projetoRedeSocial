@@ -176,13 +176,10 @@ namespace projetoRedeSocial.Controllers
             {
                 return NotFound();
             }
-            int valor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-            ViewBag.UsuarioId = valor;
-            Seguidores? seguidores = _context.seguidores.FirstOrDefault(s => s.idUsuario == id && s.idUsuarioSeguidor == valor);
 
-            ViewBag.Seguidor = seguidores != null;
+            // Verifica se o usuário está autenticado
 
-            ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
+            if (userIdCookie == null || !userIdCookie.Equals(id.ToString()))
 
             var usuario = await _context.usuario.FirstOrDefaultAsync(m => m.usuarioId == id);
             if (usuario == null)
