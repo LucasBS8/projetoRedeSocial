@@ -4,9 +4,10 @@
       "type": "secrets.user",
       "dynamicId": null
     },
-    "sqlite1": {
+    "mssql1": {
+      "serviceConnectorResourceId": "",
       "secretStore": "LocalSecretsFile",
-      "type": "sqlite.local",
+      "type": "mssql.local",
       "connectionId": "ConnectionStrings:ChaveDB",
       "dynamicId": null
     }

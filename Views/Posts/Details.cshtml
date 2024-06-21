@@ -135,6 +135,16 @@ else
             <div class="card-body">
                 <h5 class="card-title">@comentario.usuarioComentario.usuarioNome</h5>
                 <p class="card-text">@comentario.comentario</p>
+                @if (ViewBag.userId == Model.usuarioPost?.usuarioId || ViewBag.userId == Model.usuarioId)
+                {
+                    <form asp-controller="Posts" asp-action="ExcluirComentario" method="post" style="display:inline;">
+                        <input type="hidden" name="comentarioId" value="@comentario.comentarioId" />
+                        <input type="hidden" name="postId" value="@Model.postId" />
+                        <button type="submit" class="btn btn-danger">Excluir Comentário</button>
+                    </form>
+
+                }
+
             </div>
         </div>
     }

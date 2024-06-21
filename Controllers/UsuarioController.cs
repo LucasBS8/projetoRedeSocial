@@ -69,13 +69,25 @@ namespace projetoRedeSocial.Controllers
         {
             try
             {
+                // Verifica se o modelo é válido
                 if (ModelState.IsValid)
                 {
+                    // Verifica se o e-mail já está em uso
+                    var existingUser = _context.usuario.FirstOrDefault(u => u.usuarioEmail == usuario.usuarioEmail);
+                    if (existingUser != null)
+                    {
+                        // E-mail já está em uso, adiciona mensagem de erro
+                        ModelState.AddModelError("usuarioEmail", "Este endereço de e-mail já está sendo usado por outro usuário.");
+                        return View("Cadastro", usuario); // Retorna para a view de cadastro com os dados do usuário
+                    }
+
+                    // Se o e-mail não está em uso, adiciona o usuário ao contexto e salva as mudanças
                     _context.Add(usuario);
                     _context.SaveChanges();
                     return RedirectToAction("Login");
                 }
 
+                // Se o modelo não for válido, exibe mensagens de erro de validação
                 foreach (var state in ModelState.Values)
                 {
                     foreach (var error in state.Errors)
@@ -97,6 +109,7 @@ namespace projetoRedeSocial.Controllers
                 return View("Cadastro");
             }
         }
+
 
 
 
@@ -172,11 +185,14 @@ namespace projetoRedeSocial.Controllers
         // GET: Usuario/Details/5
         public async Task<IActionResult> DetailsUser(int? id)
         {
+            int valor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            if (valor == id)
+            {
+
             if (id == null || _context.usuario == null)
             {
                 return NotFound();
             }
-            int valor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             ViewBag.UsuarioId = valor;
             Seguidores? seguidores = _context.seguidores.FirstOrDefault(s => s.idUsuario == id && s.idUsuarioSeguidor == valor);
 
@@ -195,6 +211,12 @@ namespace projetoRedeSocial.Controllers
             ViewData["Seguidores"] = seguidoresUsuarios;
 
             return View(usuario);
+
+            }
+            else
+            {
+                return RedirectToAction(nameof(Login));
+            }
         }
 
 
@@ -243,54 +265,62 @@ namespace projetoRedeSocial.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("usuarioId,usuarioDesc,usuarioNome,usuarioTelefone,usuarioEmail,usuarioSenha,usuarioEndereco,usuarioCPF")] Usuario usuario, IFormFile? usuarioImagem)
         {
-            if (id != usuario.usuarioId)
+            int valor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            if (valor == id)
             {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (id != usuario.usuarioId)
                 {
-                    if (usuarioImagem != null)
+                    return NotFound();
+                }
+
+                if (ModelState.IsValid)
+                {
+                    try
                     {
-                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + usuarioImagem.FileName;
-                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                        Directory.CreateDirectory(uploadsFolder);
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        if (usuarioImagem != null)
                         {
-                            await usuarioImagem.CopyToAsync(fileStream);
+                            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                            var uniqueFileName = Guid.NewGuid().ToString() + "_" + usuarioImagem.FileName;
+                            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                            Directory.CreateDirectory(uploadsFolder);
+                            using (var fileStream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await usuarioImagem.CopyToAsync(fileStream);
+                            }
+                            usuario.usuarioImagem = "/uploads/" + uniqueFileName;
                         }
-                        usuario.usuarioImagem = "/uploads/" + uniqueFileName;
+
+                        _context.Update(usuario);
+                        await _context.SaveChangesAsync();
                     }
+                    catch (DbUpdateConcurrencyException ex)
+                    {
 
-                    _context.Update(usuario);
-                    await _context.SaveChangesAsync();
+                        TempData["Mensagem"] = "Erro ao salvar as alterações. Outro usuário pode ter modificado esses dados. Tente novamente.";
+                        return View(usuario);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        TempData["Mensagem"] = "Ocorreu um erro inesperado. Tente novamente mais tarde.";
+                        return View(usuario);
+                    }
+                    return RedirectToAction("HomePost", "Posts");
                 }
-                catch (DbUpdateConcurrencyException ex)
+
+                foreach (var state in ModelState.Values)
                 {
-
-                    TempData["Mensagem"] = "Erro ao salvar as alterações. Outro usuário pode ter modificado esses dados. Tente novamente.";
-                    return View(usuario);
+                    foreach (var error in state.Errors)
+                    {
+                        TempData["Mensagem"] += error.ErrorMessage + "<br>";
+                    }
                 }
-                catch (Exception ex)
-                {
-
-                    TempData["Mensagem"] = "Ocorreu um erro inesperado. Tente novamente mais tarde.";
-                    return View(usuario);
-                }
-                return RedirectToAction("HomePost", "Posts");
+                return View(usuario);
             }
-
-            foreach (var state in ModelState.Values)
+            else
             {
-                foreach (var error in state.Errors)
-                {
-                    TempData["Mensagem"] += error.ErrorMessage + "<br>";
-                }
+                return RedirectToAction(nameof(Login));
             }
-            return View(usuario);
         }
 
 

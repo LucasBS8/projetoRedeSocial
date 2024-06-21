@@ -158,11 +158,11 @@ namespace projetoRedeSocial.Controllers
                 {
                     if (postArquivo.Length > 0)
                     {
-                        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".mp4" };
+                        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".mp4", ".jfif" };
                         var extension = Path.GetExtension(postArquivo.FileName).ToLower();
                         if (!allowedExtensions.Contains(extension))
                         {
-                            ModelState.AddModelError("postArquivo", "Apenas arquivos (.jpg, .jpeg, .png, .gif e .mp4) são permitidos.");
+                            ModelState.AddModelError("postArquivo", "Apenas arquivos (.jfif, .jpg, .jpeg, .png, .gif e .mp4) são permitidos.");
                             return View(post);
                         }
 
@@ -190,6 +190,8 @@ namespace projetoRedeSocial.Controllers
         // GET: Posts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            int valor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+
             if (id == null || _context.post == null)
             {
                 return NotFound();
@@ -201,7 +203,16 @@ namespace projetoRedeSocial.Controllers
                 return NotFound();
             }
             ViewData["usuarioId"] = new SelectList(_context.usuario, "usuarioId", "usuarioId", post.usuarioId);
-            return View(post);
+            if (valor == post.usuarioId)
+            {
+                return View(post);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Usuario");
+            }
+
+
         }
 
         // POST: Posts/Edit/5
@@ -211,66 +222,75 @@ namespace projetoRedeSocial.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("usuarioId,postTitulo,postDesc,postCor,postDate,postStatus,postArquivo")] Post post, IFormFile? postArquivo)
         {
-            if (ModelState.IsValid)
+            int valor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            if (valor == post.usuarioId)
             {
-                try
+                Console.WriteLine("userID:" + valor + "\nUsuarioPost:" + post.usuarioId);
+                if (ModelState.IsValid)
                 {
-                    var existingPost = await _context.post.AsNoTracking().FirstOrDefaultAsync(p => p.postId == id);
-
-                    if (postArquivo != null)
+                    try
                     {
-                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + postArquivo.FileName;
-                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                        Directory.CreateDirectory(uploadsFolder);
+                        var existingPost = await _context.post.AsNoTracking().FirstOrDefaultAsync(p => p.postId == id);
 
-                        var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".mp4" };
-                        var extension = Path.GetExtension(postArquivo.FileName).ToLower();
-                        if (!allowedExtensions.Contains(extension))
+                        if (postArquivo != null)
                         {
-                            ModelState.AddModelError("postArquivo", "Apenas arquivos (.jpg, .jpeg, .png, .gif e .mp4) são permitidos.");
-                            return View(post);
-                        }
+                            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                            var uniqueFileName = Guid.NewGuid().ToString() + "_" + postArquivo.FileName;
+                            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                            Directory.CreateDirectory(uploadsFolder);
 
-                        if (!string.IsNullOrEmpty(existingPost?.postArquivo))
-                        {
-                            var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existingPost.postArquivo.TrimStart('/'));
-                            if (System.IO.File.Exists(oldFilePath))
+                            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".mp4" };
+                            var extension = Path.GetExtension(postArquivo.FileName).ToLower();
+                            if (!allowedExtensions.Contains(extension))
                             {
-                                System.IO.File.Delete(oldFilePath);
+                                ModelState.AddModelError("postArquivo", "Apenas arquivos (.jpg, .jpeg, .png, .gif e .mp4) são permitidos.");
+                                return View(post);
                             }
-                        }
 
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                            if (!string.IsNullOrEmpty(existingPost?.postArquivo))
+                            {
+                                var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existingPost.postArquivo.TrimStart('/'));
+                                if (System.IO.File.Exists(oldFilePath))
+                                {
+                                    System.IO.File.Delete(oldFilePath);
+                                }
+                            }
+
+                            using (var fileStream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await postArquivo.CopyToAsync(fileStream);
+                            }
+                            post.postArquivo = "/uploads/" + uniqueFileName;
+                        }
+                        else
                         {
-                            await postArquivo.CopyToAsync(fileStream);
+                            post.postArquivo = existingPost?.postArquivo;
                         }
-                        post.postArquivo = "/uploads/" + uniqueFileName;
-                    }
-                    else
-                    {
-                        post.postArquivo = existingPost?.postArquivo;
-                    }
 
-                    post.postId = id;
-                    _context.Update(post);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!PostExists(post.postId))
-                    {
-                        return NotFound();
+                        post.postId = id;
+                        _context.Update(post);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!PostExists(post.postId))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(HomePost));
                 }
-                return RedirectToAction(nameof(HomePost));
+                ViewData["usuarioId"] = new SelectList(_context.usuario, "usuarioId", "usuarioId", post.usuarioId);
+                return View(post);
             }
-            ViewData["usuarioId"] = new SelectList(_context.usuario, "usuarioId", "usuarioId", post.usuarioId);
-            return View(post);
+            else
+            {
+                return RedirectToAction("Login", "Usuario");
+            }
         }
 
 
@@ -305,6 +325,47 @@ namespace projetoRedeSocial.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(HomePost));
         }
+
+        // POST: Posts/ExcluirComentario/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ExcluirComentario(int comentarioId, int postId)
+        {
+            try
+            {
+                // Verifica se o usuário está autenticado e obtém o ID do usuário
+                int userId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+
+                // Busca o comentário pelo ID
+                var comentario = await _context.comentarios.FindAsync(comentarioId);
+
+                if (comentario == null)
+                {
+                    return NotFound();
+                }
+
+                // Verifica se o usuário é o autor do comentário ou tem permissões para excluir
+                if (userId != comentario.usuarioId)
+                {
+                    // Redireciona para uma página de erro ou uma ação adequada
+                    return RedirectToAction("AccessDenied", "Error");
+                }
+
+                // Remove o comentário do contexto e salva as alterações
+                _context.comentarios.Remove(comentario);
+                await _context.SaveChangesAsync();
+
+                // Redireciona de volta para a página de detalhes do post
+                return RedirectToAction("Details", "Posts", new { id = postId });
+            }
+            catch (Exception ex)
+            {
+                // Trate exceções específicas, se necessário, e redirecione para uma página de erro
+                TempData["Mensagem"] = "Erro ao excluir comentário: " + ex.Message;
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
 
         private bool PostExists(int id)
         {
