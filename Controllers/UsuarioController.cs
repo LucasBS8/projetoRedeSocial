@@ -196,11 +196,11 @@ namespace projetoRedeSocial.Controllers
             ViewBag.UsuarioId = valor;
             Seguidores? seguidores = _context.seguidores.FirstOrDefault(s => s.idUsuario == id && s.idUsuarioSeguidor == valor);
 
-            ViewBag.Seguidor = seguidores != null;
+                ViewBag.Seguidor = seguidores != null;
 
-            ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
+                ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
 
-            var usuario = await _context.usuario.FirstOrDefaultAsync(m => m.usuarioId == id);
+                var usuario = await _context.usuario.FirstOrDefaultAsync(m => m.usuarioId == id);
             if (usuario == null)
             {
                 return NotFound();
