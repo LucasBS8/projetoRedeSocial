@@ -246,6 +246,7 @@ namespace projetoRedeSocial.Controllers
         // GET: Usuario/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            int valor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             if (id == null || _context.usuario == null)
             {
                 return NotFound();
@@ -256,7 +257,15 @@ namespace projetoRedeSocial.Controllers
             {
                 return NotFound();
             }
-            return View(usuario);
+            ViewData["usuarioId"] = new SelectList(_context.usuario, "usuarioId", "usuarioId", usuario.usuarioId);
+            if (valor == usuario.usuarioId)
+            {
+                return View(usuario);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Usuario");
+            }
         }
 
         // POST: Usuario/Edit/5
@@ -267,7 +276,7 @@ namespace projetoRedeSocial.Controllers
         public async Task<IActionResult> Edit(int id, [Bind("usuarioId,usuarioDesc,usuarioNome,usuarioTelefone,usuarioEmail,usuarioSenha,usuarioEndereco,usuarioCPF")] Usuario usuario, IFormFile? usuarioImagem)
         {
             int valor = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-            if (valor == id)
+            if (valor == usuario.usuarioId)
             {
                 if (id != usuario.usuarioId)
                 {

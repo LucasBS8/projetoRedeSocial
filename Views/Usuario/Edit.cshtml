@@ -19,7 +19,7 @@
             }
 
             <div>
-                @if (Model.usuarioImagem == null)
+                @if (Model.usuarioImagem != null)
                 {
                     <div class="d-flex justify-content-center mb-4">
                         <img id="selectedAvatar" src="@Url.Content("~/imgSistema/person-circle.png")"
