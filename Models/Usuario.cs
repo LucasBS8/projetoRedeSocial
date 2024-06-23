@@ -23,8 +23,8 @@ namespace projetoRedeSocial.Models
         [Display(Name = "Nome")]
         public string? usuarioNome { get; set; }
 
-        [StringLength(8, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
-        [RegularExpression(@"^(?=.*[0-9]).{8,}$", ErrorMessage = "Apenas devem ter números")]
+        [StringLength(10, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
+        [RegularExpression(@"^(?=.*[0-9]).{10,}$", ErrorMessage = "Apenas devem ter números")]
         [Column("usuarioTelefone")]
         [Display(Name = "Telefone")]
         public string? usuarioTelefone { get; set; }

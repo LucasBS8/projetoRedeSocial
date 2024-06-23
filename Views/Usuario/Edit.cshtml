@@ -43,11 +43,7 @@
                 </div>
             </div>
             <div class="d-flex row">
-                <div class="form-group">
-                    <label asp-for="usuarioDesc" class="control-label"></label>
-                    <input asp-for="usuarioDesc" class="form-control" />
-                    <span asp-validation-for="usuarioDesc" class="text-danger"></span>
-                </div>
+
                 <div class="form-group">
                     <label asp-for="usuarioNome" class="control-label"></label>
                     <input asp-for="usuarioNome" class="form-control" required />
@@ -78,6 +74,11 @@
                     <input asp-for="usuarioCPF" id="cpf" type="text" class="form-control" />
                     <span asp-validation-for="usuarioCPF" class="text-danger"></span>
                 </div>
+                <div class="form-group">
+                    <label asp-for="usuarioDesc" class="control-label"></label>
+                    <input type="text" asp-for="usuarioDesc" class="form-control">
+                    <span asp-validation-for="usuarioDesc" class="text-danger"></span>
+                </div>
             </div>
             <div class="row mt-4">
                 <div class="col text-center">
@@ -90,11 +91,6 @@
         </form>
     </div>
 </div>
-
-<!-- Adicionar jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Adicionar jQuery Mask Plugin -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
 <script>
     function displaySelectedImage(event, elementId) {
@@ -111,9 +107,4 @@
             reader.readAsDataURL(fileInput.files[0]);
         }
     }
-
-    $(document).ready(function () {
-        $('#telefone').mask('(00) 00000-0000');
-        $('#cpf').mask('000.000.000-00');
-    });
 </script>

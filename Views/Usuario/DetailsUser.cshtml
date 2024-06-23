@@ -2,6 +2,22 @@
 
 @{
     ViewData["Title"] = "Details";
+
+    // Método simples de formatação de telefone
+    string FormatPhone(string phone)
+    {
+        if (string.IsNullOrWhiteSpace(phone)) return string.Empty;
+        phone = new string(phone.Where(char.IsDigit).ToArray());
+        if (phone.Length == 10)
+        {
+            return $"({phone.Substring(0, 2)}) {phone.Substring(2, 4)}-{phone.Substring(6, 4)}";
+        }
+        if (phone.Length == 11)
+        {
+            return $"({phone.Substring(0, 2)}) {phone.Substring(2, 5)}-{phone.Substring(7, 4)}";
+        }
+        return phone; // Retorna como está se não atender aos formatos acima
+    }
 }
 
 <div class="row align-items-center justify-content-between">
@@ -17,7 +33,7 @@
 
         <div class="text-light ms-3">
             <h1>@Model.usuarioNome</h1>
-            <h4>Telefone: @Model.usuarioTelefone</h4>
+            <h4>Telefone: @FormatPhone(Model.usuarioTelefone)</h4>
             <h4>E-mail: @Model.usuarioEmail</h4>
         </div>
     </div>

@@ -9,6 +9,14 @@
     <form asp-controller="Usuario" asp-action="Entrar" method="post" class="form p-5 radiusBorder bg-primary text-white w-50">
         <h1 class="text-center">NexHub</h1>
         <h3 class="text-center">Login</h3>
+
+        @if (TempData["MensagemErro"] != null)
+        {
+            <div class="alert alert-danger" role="alert">
+                @Html.Raw(TempData["MensagemErro"])
+            </div>
+        }
+
         <div class="mb-3">
             <label class="form-label pt-3">Email</label>
             <input asp-for="usuarioEmail" type="email" class="form-control" placeholder="nome@exemplo.com">

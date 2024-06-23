@@ -14,7 +14,7 @@
         @if (TempData["Mensagem"] != null)
         {
             <div class="alert alert-danger" role="alert">
-                @TempData["Mensagem"]
+                @Html.Raw(TempData["Mensagem"])
             </div>
         }
 
@@ -34,4 +34,3 @@
         </div>
     </form>
 </div>
-

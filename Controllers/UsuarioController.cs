@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using projetoRedeSocial.Models;
+using System.Text.RegularExpressions;
 
 namespace projetoRedeSocial.Controllers
 {
@@ -50,7 +51,7 @@ namespace projetoRedeSocial.Controllers
                     }
                     else
                     {
-                        TempData["Mensagem"] = "Email ou senha inválidos.";
+                        TempData["MensagemErro"] = "Email ou senha inválidos.";
                         return View("Login");
                     }
                 }
@@ -59,56 +60,53 @@ namespace projetoRedeSocial.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Mensagem"] = "Erro: " + ex.Message;
+                TempData["MensagemErro"] = "Erro: " + ex.Message;
                 return View("Login");
             }
         }
+
 
         [HttpPost]
         public ActionResult Registrar(Usuario usuario)
         {
             try
             {
-                // Verifica se o modelo é válido
                 if (ModelState.IsValid)
                 {
-                    // Verifica se o e-mail já está em uso
                     var existingUser = _context.usuario.FirstOrDefault(u => u.usuarioEmail == usuario.usuarioEmail);
                     if (existingUser != null)
                     {
-                        // E-mail já está em uso, adiciona mensagem de erro
-                        ModelState.AddModelError("usuarioEmail", "Este endereço de e-mail já está sendo usado por outro usuário.");
-                        return View("Cadastro", usuario); // Retorna para a view de cadastro com os dados do usuário
+                        TempData["Mensagem"] = "Este endereço de e-mail já está sendo usado por outro usuário.";
+                        return RedirectToAction("Cadastro", usuario);
                     }
 
-                    // Se o e-mail não está em uso, adiciona o usuário ao contexto e salva as mudanças
                     _context.Add(usuario);
                     _context.SaveChanges();
                     return RedirectToAction("Login");
                 }
 
-                // Se o modelo não for válido, exibe mensagens de erro de validação
                 foreach (var state in ModelState.Values)
                 {
                     foreach (var error in state.Errors)
                     {
-                        TempData["Mensagem"] = error.ErrorMessage;
+                        TempData["Mensagem"] += error.ErrorMessage + "<br>";
                     }
                 }
 
-                return View("Cadastro");
+                return RedirectToAction("Cadastro", usuario);
             }
             catch (DbUpdateException dbEx)
             {
                 TempData["Mensagem"] = "Erro: " + dbEx.Message;
-                return View("Cadastro");
+                return RedirectToAction("Cadastro", usuario);
             }
             catch (Exception ex)
             {
                 TempData["Mensagem"] = "Erro: " + ex.Message;
-                return View("Cadastro");
+                return RedirectToAction("Cadastro", usuario);
             }
         }
+
 
 
 
@@ -162,6 +160,7 @@ namespace projetoRedeSocial.Controllers
         // GET: Usuario/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
             if (id == null || _context.usuario == null)
             {
                 return NotFound();
@@ -171,6 +170,8 @@ namespace projetoRedeSocial.Controllers
             Seguidores? seguidores = _context.seguidores.FirstOrDefault(s => s.idUsuario == id && s.idUsuarioSeguidor == valor);
 
             ViewBag.Seguidor = seguidores != null;
+
+
 
             ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
             var usuario = await _context.usuario.FirstOrDefaultAsync(m => m.usuarioId == id);
@@ -315,7 +316,7 @@ namespace projetoRedeSocial.Controllers
                         TempData["Mensagem"] += error.ErrorMessage + "<br>";
                     }
                 }
-                return View(usuario);
+                return RedirectToAction(nameof(DetailsUser), new { id });
             }
             else
             {
@@ -374,6 +375,8 @@ namespace projetoRedeSocial.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Login));
         }
+
+
 
 
         private bool UsuarioExists(int id)
