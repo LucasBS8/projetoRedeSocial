@@ -5,10 +5,10 @@
 }
 
 <div class="row align-items-center text-white ">
-    <div class="col row align-items-center ">
+    <div class="col d-fle row align-items-center ">
         @if (ViewBag.userId == Model.usuarioPost?.usuarioId)
         {
-            <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@Model.usuarioPost?.usuarioId">
+            <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@Model.usuarioPost?.usuarioId" class=" link-underline link-underline-opacity-0 text-white">
                 @if (Model.usuarioPost?.usuarioImagem != null)
                 {
                     <img src="@Url.Content(Model.usuarioPost.usuarioImagem)" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" />
@@ -31,7 +31,7 @@
                 {
                     <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
                 }
-                <span class="fs-4 ms-3 d-none d-sm-inline h1">@Model.usuarioPost?.usuarioNome</span>
+                <span class="fs-4 ms-3 d-none d-sm-inline text-white h1">@Model.usuarioPost?.usuarioNome</span>
             </a>
         }
     </div>
@@ -48,7 +48,7 @@
                     <li>
                         <form asp-action="Delete" method="post" style="display:inline;">
                             <input type="hidden" name="id" value="@Model.postId" />
-                            <button type="submit" class="dropdown-item">Excluir</button>
+                            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Excluir</button>
                         </form>
                     </li>
                 </ul>
@@ -79,15 +79,15 @@
         <hr />
         <div class="col-5 d-flex justify-content-center flex-column text-center" style="max-width:800px">
             <p class="h3">@Html.DisplayFor(model => model.postTitulo)</p>
-            <div class="h4" style="overflow-y: scroll; height: 400px;">
+            <textarea class="h4 form-control bg-dark text-white" disabled style="height:500px">
                 @Html.DisplayFor(model => model.postDesc)
-            </div>
+                        </textarea>
         </div>
         <div class="col-5 ">
 
             @if (!Model.postArquivo.Contains(".mp4"))
             {
-                <img src="@Url.Content(Model.postArquivo)" class="post-img" style="object-fit:cover"/>
+                <img src="@Url.Content(Model.postArquivo)" class="post-img" style="object-fit:cover" />
             }
             else
             {
@@ -106,9 +106,9 @@ else
         <hr />
         <div class="col-10 d-flex justify-content-center flex-column text-center ">
             <p class="h3">@Html.DisplayFor(model => model.postTitulo)</p>
-            <div class="h4">
+            <textarea class="h4 form-control bg-dark text-white" disabled style="height:500px">
                 @Html.DisplayFor(model => model.postDesc)
-            </div>
+                    </textarea>
         </div>
     </div>
     <hr />
@@ -135,17 +135,63 @@ else
             <div class="card-body">
                 <h5 class="card-title">@comentario.usuarioComentario.usuarioNome</h5>
                 <p class="card-text">@comentario.comentario</p>
-                @if (ViewBag.userId == Model.usuarioPost?.usuarioId || ViewBag.userId == Model.usuarioId)
+                @if (ViewBag.userId == Model.usuarioPost?.usuarioId || ViewBag.userId == comentario.usuarioId)
                 {
-                    <form asp-controller="Posts" asp-action="ExcluirComentario" method="post" style="display:inline;">
-                        <input type="hidden" name="comentarioId" value="@comentario.comentarioId" />
-                        <input type="hidden" name="postId" value="@Model.postId" />
-                        <button type="submit" class="btn btn-danger">Excluir Comentário</button>
-                    </form>
+
+
+                    <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteComentario">Excluir Comentário</button>
+
+
 
                 }
-
+                @{
+                    Console.WriteLine("-----------------------------------------------------------------------");
+                    Console.WriteLine(ViewBag.userId);
+                    Console.WriteLine(Model.usuarioPost.usuarioId);
+                }
+            </div>
+        </div>
+        <div class="modal fade " id="confirmDeleteComentario" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog bg-dark " style="border-radius:20px">
+                <div class="modal-content  bg-dark " style="border-radius:20px">
+                    <div class="modal-header  bg-dark" style="border-top-left-radius: 20px; border-top-right-radius: 20px">
+                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+                    </div>
+                    <div class="modal-body">
+                        Tem certeza de que deseja excluir esse comentário? Esta ação não pode ser desfeita.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <form asp-controller="Posts" asp-action="ExcluirComentario" method="post" style="display:inline;">
+                            <input type="hidden" name="comentarioId" value="@comentario.comentarioId" />
+                            <input type="hidden" name="postId" value="@Model.postId" />
+                            <button type="submit" class="btn btn-danger">Excluir Comentário</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     }
 }
+
+
+
+<div class="modal fade " id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark " style="border-radius:20px">
+        <div class="modal-content  bg-dark " style="border-radius:20px">
+            <div class="modal-header  bg-dark" style="border-top-left-radius: 20px; border-top-right-radius: 20px">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+            </div>
+            <div class="modal-body">
+                Tem certeza de que deseja excluir esse post? Esta ação não pode ser desfeita.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form asp-action="Delete" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@Model.postId" />
+                    <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Excluir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

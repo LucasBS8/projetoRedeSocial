@@ -13,7 +13,7 @@ namespace projetoRedeSocial.Models
         [Display(Name = "Perfil")]
         public string? usuarioImagem { get; set; }
 
-        [StringLength(100, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
+        [StringLength(500, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
         [Column("usuarioDesc")]
         [Display(Name = "Descrição")]
         public string? usuarioDesc { get; set; }

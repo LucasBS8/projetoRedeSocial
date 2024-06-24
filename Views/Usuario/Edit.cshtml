@@ -19,7 +19,7 @@
             }
 
             <div>
-                @if (Model.usuarioImagem != null)
+                @if (Model.usuarioImagem == null)
                 {
                     <div class="d-flex justify-content-center mb-4">
                         <img id="selectedAvatar" src="@Url.Content("~/imgSistema/person-circle.png")"
@@ -76,7 +76,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="usuarioDesc" class="control-label"></label>
-                    <input type="text" asp-for="usuarioDesc" class="form-control">
+                    <textarea asp-for="usuarioDesc" class="form-control"></textarea>
                     <span asp-validation-for="usuarioDesc" class="text-danger"></span>
                 </div>
             </div>

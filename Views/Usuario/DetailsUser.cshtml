@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Details";
 
-    // Método simples de formatação de telefone
     string FormatPhone(string phone)
     {
         if (string.IsNullOrWhiteSpace(phone)) return string.Empty;
@@ -16,7 +15,7 @@
         {
             return $"({phone.Substring(0, 2)}) {phone.Substring(2, 5)}-{phone.Substring(7, 4)}";
         }
-        return phone; // Retorna como está se não atender aos formatos acima
+        return phone;
     }
 }
 
@@ -45,10 +44,7 @@
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
             <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.usuarioId">Editar</a></li>
             <li>
-                <form asp-action="DeleteConfirmed" method="post" style="display:inline;">
-                    <input type="hidden" name="id" value="@Model.usuarioId" />
-                    <button type="submit" class="dropdown-item">Excluir</button>
-                </form>
+                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Excluir</button>
             </li>
         </ul>
     </div>
@@ -61,7 +57,7 @@
         <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Posts</button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Perfis</button>
+        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Seguidores</button>
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="pills-desc-tab" data-bs-toggle="pill" data-bs-target="#pills-desc" type="button" role="tab" aria-controls="pills-desc" aria-selected="false">Descrição</button>
@@ -127,9 +123,26 @@
         }
     </div>
 
-    <div class="tab-pane fade" id="pills-desc" role="tabpanel" aria-labelledby="pills-desc-tab">
-        <div class="description-container text-light">
-            <p>@Model.usuarioDesc</p>
+    <textarea class="bg-dark text-white w-100 fade form-control" id="pills-desc" disabled style="height:70vh">@Model.usuarioDesc</textarea>
+</div>
+
+
+<div class="modal fade " id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark " style="border-radius:20px">
+        <div class="modal-content  bg-dark " style="border-radius:20px">
+            <div class="modal-header  bg-dark" style="border-top-left-radius: 20px; border-top-right-radius: 20px">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+            </div>
+            <div class="modal-body">
+                Tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita.
+            </div>
+            <div class="modal-footer" >
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form asp-action="DeleteConfirmed" method="post">
+                    <input type="hidden" name="id" value="@Model.usuarioId" />
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
