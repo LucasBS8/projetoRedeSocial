@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using projetoRedeSocial.Models;
 
 namespace projetoRedeSocial.Controllers
@@ -24,13 +25,6 @@ namespace projetoRedeSocial.Controllers
         {
             ViewData["Usuario"] = _context.usuario.ToList();
             ViewBag.userId = HttpContext.Session.GetString("UserId");
-            var contexto = _context.post.Include(p => p.usuarioPost);
-            return View(await contexto.ToListAsync());
-        }
-
-        // GET: Posts
-        public async Task<IActionResult> Index()
-        {
             var contexto = _context.post.Include(p => p.usuarioPost);
             return View(await contexto.ToListAsync());
         }
@@ -239,11 +233,11 @@ namespace projetoRedeSocial.Controllers
                             var filePath = Path.Combine(uploadsFolder, uniqueFileName);
                             Directory.CreateDirectory(uploadsFolder);
 
-                            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".mp4" };
+                            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".mp4", ".jfif" };
                             var extension = Path.GetExtension(postArquivo.FileName).ToLower();
                             if (!allowedExtensions.Contains(extension))
                             {
-                                ModelState.AddModelError("postArquivo", "Apenas arquivos (.jpg, .jpeg, .png, .gif e .mp4) são permitidos.");
+                                ModelState.AddModelError("postArquivo", "Apenas arquivos (.jfif, .jpg, .jpeg, .png, .gif e .mp4) são permitidos.");
                                 return View(post);
                             }
 

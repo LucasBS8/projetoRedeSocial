@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using projetoRedeSocial.Models;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.CookiePolicy;
 
 namespace projetoRedeSocial.Controllers
 {
@@ -24,6 +25,9 @@ namespace projetoRedeSocial.Controllers
 
         public ActionResult Login()
         {
+
+            DeleteCookieContext deleteCookie = ViewBag.usuarioId;
+
 
             return View();
         }
@@ -40,6 +44,12 @@ namespace projetoRedeSocial.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if(ViewBag.usuarioId != null)
+                    {
+                        Console.WriteLine(ViewBag.usuarioId);
+                        ViewBag.usuarioId = null;
+                    }
+
                     var user = _context.usuario
                         .FirstOrDefault(u => u.usuarioEmail == usuario.usuarioEmail && u.usuarioSenha == usuario.usuarioSenha);
 
@@ -105,18 +115,6 @@ namespace projetoRedeSocial.Controllers
                 TempData["Mensagem"] = "Erro: " + ex.Message;
                 return RedirectToAction("Cadastro", usuario);
             }
-        }
-
-
-
-
-
-        // GET: Usuario
-        public async Task<IActionResult> Index()
-        {
-              return _context.usuario != null ? 
-                          View(await _context.usuario.ToListAsync()) :
-                          Problem("Entity set 'Contexto.usuario'  is null.");
         }
 
         [HttpPost]
@@ -224,29 +222,6 @@ namespace projetoRedeSocial.Controllers
             }
         }
 
-
-        // GET: Usuario/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Usuario/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("usuarioId,usuarioImagem,usuarioDesc,usuarioNome,usuarioTelefone,usuarioEmail,usuarioSenha,usuarioEndereco,usuarioCPF")] Usuario usuario)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(usuario);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(usuario);
-        }
-
         // GET: Usuario/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -293,6 +268,15 @@ namespace projetoRedeSocial.Controllers
                     {
                         if (usuarioImagem != null)
                         {
+
+                            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".jfif" };
+                            var extension = Path.GetExtension(usuarioImagem.FileName).ToLower();
+                            if (!allowedExtensions.Contains(extension))
+                            {
+                                ModelState.AddModelError("postArquivo", "Apenas arquivos (.jfif, .jpg, .jpeg, .png, .gif) são permitidos.");
+                                return View(usuario);
+                            }
+
                             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
                             var uniqueFileName = Guid.NewGuid().ToString() + "_" + usuarioImagem.FileName;
                             var filePath = Path.Combine(uploadsFolder, uniqueFileName);
