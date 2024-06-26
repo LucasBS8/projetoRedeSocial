@@ -36,6 +36,16 @@ namespace projetoRedeSocial.Controllers
             return View();
         }
 
+
+        [HttpPost]
+        public ActionResult Logout()
+        {
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Session.Clear();
+            Response.Cookies.Delete(".AspNetCore.Cookies");
+            return RedirectToAction(nameof(Login));
+        }
+
         [HttpPost]
         public ActionResult Entrar(Usuario usuario)
         {
@@ -250,6 +260,9 @@ namespace projetoRedeSocial.Controllers
             }
             else
             {
+                HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                HttpContext.Session.Clear();
+                Response.Cookies.Delete(".AspNetCore.Cookies");
                 return RedirectToAction(nameof(Login));
             }
         }

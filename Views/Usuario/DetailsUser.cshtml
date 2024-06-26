@@ -78,8 +78,8 @@
                     @if (post.usuarioId == Model.usuarioId)
                     {
 
-                        <div class="col-auto">
-                            <a asp-action="Details" asp-route-id="@post.postId">
+                        <div class="col-auto p-4">
+                            <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.postId">
                                 <div class="position-relative" style="width: 390px; height: 220px; border-radius: 22px; background-color: @post.postCor;">
                                     <div class="position-absolute top-0 bottom-0 start-0 end-0">
                                         @if (!string.IsNullOrEmpty(post.postArquivo))
