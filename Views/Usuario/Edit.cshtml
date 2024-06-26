@@ -5,90 +5,81 @@
     ViewData["Title"] = "Editar Usuário";
 }
 
-<div class="row justify-content-center">
-    <div class="col-auto">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <input type="hidden" asp-for="usuarioId" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <input type="hidden" asp-for="usuarioId" />
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-            @if (TempData["Mensagem"] != null)
-            {
-                <div class="alert alert-danger" role="alert">
-                    @Html.Raw(TempData["Mensagem"])
+                @if (TempData["Mensagem"] != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @Html.Raw(TempData["Mensagem"])
+                    </div>
+                }
+
+                <div class="text-center mb-4">
+                    <img id="selectedAvatar" src="@Url.Content(Model.usuarioImagem ?? "~/imgSistema/person-circle.png")"
+                         class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="Avatar" />
                 </div>
-            }
 
-            <div>
-                @if (Model.usuarioImagem == null)
-                {
-                    <div class="d-flex justify-content-center mb-4">
-                        <img id="selectedAvatar" src="@Url.Content("~/imgSistema/person-circle.png")"
-                             class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="Avatar" />
-                    </div>
-                }
-                else
-                {
-                    <div class="d-flex justify-content-center mb-4">
-                        <img id="selectedAvatar" src="@Url.Content(Model.usuarioImagem)"
-                             class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="Avatar" />
-                    </div>
-                }
-
-                <div class="d-flex justify-content-center">
-                    <div data-mdb-ripple-init class="btn btn-primary btn-rounded">
-                        <label class="form-label text-white m-1" for="customFile2">Escolha uma imagem</label>
+                <div class="text-center mb-4">
+                    <label class="btn btn-primary btn-rounded">
+                        Escolha uma imagem
                         <input asp-for="usuarioImagem" type="file" class="form-control d-none" id="customFile2" onchange="displaySelectedImage(event, 'selectedAvatar')" />
-                        <span asp-validation-for="usuarioImagem" class="text-danger"></span>
-                    </div>
+                    </label>
+                    <span asp-validation-for="usuarioImagem" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="d-flex row">
 
-                <div class="form-group">
-                    <label asp-for="usuarioNome" class="control-label"></label>
+                <div class="mb-3">
+                    <label asp-for="usuarioNome" class="form-label"></label>
                     <input asp-for="usuarioNome" class="form-control" required />
                     <span asp-validation-for="usuarioNome" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="usuarioTelefone" class="control-label"></label>
-                    <input asp-for="usuarioTelefone" id="telefone" type="text" class="form-control" />
+
+                <div class="mb-3">
+                    <label asp-for="usuarioTelefone" class="form-label"></label>
+                    <input asp-for="usuarioTelefone" id="telefone" type="text" class="form-control" required />
                     <span asp-validation-for="usuarioTelefone" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="usuarioEmail" class="control-label"></label>
+
+                <div class="mb-3">
+                    <label asp-for="usuarioEmail" class="form-label"></label>
                     <input asp-for="usuarioEmail" type="email" class="form-control" required />
                     <span asp-validation-for="usuarioEmail" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="usuarioSenha" class="control-label"></label>
+
+                <div class="mb-3">
+                    <label asp-for="usuarioSenha" class="form-label"></label>
                     <input asp-for="usuarioSenha" type="password" class="form-control" required />
                     <span asp-validation-for="usuarioSenha" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="usuarioEndereco" class="control-label"></label>
+
+                <div class="mb-3">
+                    <label asp-for="usuarioEndereco" class="form-label"></label>
                     <input asp-for="usuarioEndereco" class="form-control" />
                     <span asp-validation-for="usuarioEndereco" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="usuarioCPF" class="control-label"></label>
+
+                <div class="mb-3">
+                    <label asp-for="usuarioCPF" class="form-label"></label>
                     <input asp-for="usuarioCPF" id="cpf" type="text" class="form-control" />
                     <span asp-validation-for="usuarioCPF" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="usuarioDesc" class="control-label"></label>
+
+                <div class="mb-3">
+                    <label asp-for="usuarioDesc" class="form-label"></label>
                     <textarea asp-for="usuarioDesc" class="form-control"></textarea>
                     <span asp-validation-for="usuarioDesc" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col text-center">
+
+                <div class="text-center">
                     <button type="submit" class="btn btn-success w-50">Salvar</button>
-                </div>
-                <div class="col text-center">
                     <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@Model.usuarioId" class="btn btn-secondary w-50">Voltar</a>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -107,4 +98,12 @@
             reader.readAsDataURL(fileInput.files[0]);
         }
     }
+
+    document.getElementById('telefone').addEventListener('input', function (e) {
+        this.value = this.value.replace(/\D/g, '');
+    });
+
+    document.getElementById('cpf').addEventListener('input', function (e) {
+        this.value = this.value.replace(/\D/g, '');
+    });
 </script>

@@ -57,7 +57,10 @@
         <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Posts</button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Seguidores</button>
+        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Seguindo</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-desc-tab" data-bs-toggle="pill" data-bs-target="#pills-seguidor" type="button" role="tab" aria-controls="pills-desc" aria-selected="false">Seguidores</button>
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="pills-desc-tab" data-bs-toggle="pill" data-bs-target="#pills-desc" type="button" role="tab" aria-controls="pills-desc" aria-selected="false">Descrição</button>
@@ -67,58 +70,112 @@
 <div class="tab-content" id="pills-tabContent">
     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
         <div class="row">
-            @foreach (var post in ViewBag.Posts)
+            @if (ViewBag.Posts != null)
             {
-                @if (post.usuarioId == Model.usuarioId)
+
+                @foreach (var post in ViewBag.Posts)
                 {
-                    <div class="col-auto">
-                        <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.postId">
-                            <div class="post-card" style="background-color: @post.postCor">
-                                @if (!string.IsNullOrEmpty(post.postArquivo))
-                                {
-                                    if (!post.postArquivo.Contains(".mp4"))
+                    @if (post.usuarioId == Model.usuarioId)
+                    {
+                        <div class="col-auto">
+                            <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.postId">
+                                <div class="post-card" style="background-color: @post.postCor">
+                                    @if (!string.IsNullOrEmpty(post.postArquivo))
                                     {
-                                        <img src="@Url.Content(post.postArquivo)" class="rounded-img" />
+                                        if (!post.postArquivo.Contains(".mp4"))
+                                        {
+                                            <img src="@Url.Content(post.postArquivo)" class="rounded-img" />
+                                        }
+                                        else
+                                        {
+                                            <video src="@Url.Content(post.postArquivo)" class="rounded-video">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        }
                                     }
                                     else
                                     {
-                                        <video src="@Url.Content(post.postArquivo)" class="rounded-video">
-                                            Your browser does not support the video tag.
-                                        </video>
+                                        <div class="post-title">@post.postTitulo</div>
+                                        <div class="post-desc">@post.postDesc</div>
                                     }
-                                }
-                                else
-                                {
-                                    <div class="post-title">@post.postTitulo</div>
-                                    <div class="post-desc">@post.postDesc</div>
-                                }
-                            </div>
-                        </a>
-                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
                 }
+            }
+            else
+            {
+                <div class="d-flex justify-content-center p-4">
+                    <h4>Esse usuário não fez nenhum post</h4>
+                </div>
             }
         </div>
     </div>
 
-    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-        @foreach (var usuario in ViewData["Seguidores"] as List<projetoRedeSocial.Models.Usuario>)
+
+    <div class="tab-pane fade" id="pills-seguidor" role="tabpanel" aria-labelledby="pills-profile-tab">
+        @if (ViewData["Seguidores"] != null)
         {
-            <div class="d-flex flex-column">
-                <a asp-controller="Usuario" asp-action="Details" asp-route-id="@usuario.usuarioId" class="d-flex align-items-center justify-content-between link-offset-2 link-underline link-underline-opacity-0 py-2">
-                    <div class="align-items-center">
-                        @if (usuario.usuarioImagem != null)
-                        {
-                            <img src="@Url.Content(usuario.usuarioImagem)" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
-                        }
-                        else
-                        {
-                            <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
-                        }
-                        <span class="fs-4 ms-3 text-white">@usuario.usuarioNome</span>
-                    </div>
-                    <i class="bi bi-arrow-right text-white display-6"></i>
-                </a>
-                <hr class="my-2" />
+            @foreach (var usuario in ViewData["Seguidores"] as List<projetoRedeSocial.Models.Usuario>)
+            {
+                <div class="d-flex flex-column">
+                    <a asp-controller="Usuario" asp-action="Details" asp-route-id="@usuario.usuarioId" class="d-flex align-items-center justify-content-between link-offset-2 link-underline link-underline-opacity-0 py-2">
+                        <div class="align-items-center">
+                            @if (usuario.usuarioImagem != null)
+                            {
+                                <img src="@Url.Content(usuario.usuarioImagem)" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
+                            }
+                            <span class="fs-4 ms-3 text-white">@usuario.usuarioNome</span>
+                        </div>
+                        <i class="bi bi-arrow-right text-white display-6"></i>
+                    </a>
+                    <hr class="my-2" />
+                </div>
+            }
+        }
+        else
+        {
+            <div class="d-flex justify-content-center p-4">
+                <h4>Ninguém está seguindo esse usuário</h4>
+            </div>
+        }
+    </div>
+
+
+
+    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+        @if (ViewData["Seguindo"] != null)
+        {
+            @foreach (var usuario in ViewData["Seguindo"] as List<projetoRedeSocial.Models.Usuario>)
+            {
+                <div class="d-flex flex-column">
+                    <a asp-controller="Usuario" asp-action="Details" asp-route-id="@usuario.usuarioId" class="d-flex align-items-center justify-content-between link-offset-2 link-underline link-underline-opacity-0 py-2">
+                        <div class="align-items-center">
+                            @if (usuario.usuarioImagem != null)
+                            {
+                                <img src="@Url.Content(usuario.usuarioImagem)" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
+                            }
+                            <span class="fs-4 ms-3 text-white">@usuario.usuarioNome</span>
+                        </div>
+                        <i class="bi bi-arrow-right text-white display-6"></i>
+                    </a>
+                    <hr class="my-2" />
+                </div>
+            }
+        }
+        else
+        {
+            <div class="d-flex justify-content-center p-4">
+                <h4>Esse usuário não está seguindo ninguém</h4>
             </div>
         }
     </div>
@@ -136,7 +193,7 @@
             <div class="modal-body">
                 Tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita.
             </div>
-            <div class="modal-footer" >
+            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <form asp-action="DeleteConfirmed" method="post">
                     <input type="hidden" name="id" value="@Model.usuarioId" />

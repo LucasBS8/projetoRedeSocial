@@ -5,63 +5,64 @@
     ViewData["Title"] = "Create";
 }
 
-<form class="w-100 p-5" asp-action="Create" enctype="multipart/form-data">
-    <input asp-for="postDate" type="hidden" />
-    <input asp-for="usuarioId" type="hidden" />
+<div class="container mt-5">
+    <form class="w-100 p-5" asp-action="Create" enctype="multipart/form-data">
+        <input asp-for="postDate" type="hidden" />
+        <input asp-for="usuarioId" type="hidden" />
 
-    <div asp-validation-summary="ModelOnly" class="text-danger text-center"></div>
-    <div class="d-flex row justify-content-center">
-        <div class="col-5">
-            <h1 class="text-center display-2 fw-bold">Post</h1>
-            <div class="form-group col-auto">
-                <label asp-for="postTitulo" class="control-label">Título</label>
-                <input asp-for="postTitulo" class="form-control" style="border-radius: 10px;" required />
-                <span asp-validation-for="postTitulo" class="text-danger"></span>
-            </div>
-
-            <div class="form-group col-auto">
-                <label asp-for="postDesc" class="control-label">Descrição</label>
-                <textarea asp-for="postDesc" class="form-control" style="border-radius: 10px;"></textarea>
-                <span asp-validation-for="postDesc" class="text-danger"></span>
-            </div>
-
-            <div class="form-group col-auto">
-                <label asp-for="postStatus" class="control-label">Status</label>
-                <div class="form-check">
-                    <input asp-for="postStatus" type="radio" name="postStatus" value="0" class="form-check-input" required />
-                    <label class="form-check-label" for="postStatus">Privado</label>
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger text-center"></div>
+        <div class="row justify-content-center">
+            <div class="col-lg-5 mb-4">
+                <h1 class="text-center display-4 fw-bold mb-4">Novo Post</h1>
+                <div class="form-group mb-3">
+                    <label asp-for="postTitulo" class="form-label">Título</label>
+                    <input asp-for="postTitulo" class="form-control" style="border-radius: 10px;" required />
+                    <span asp-validation-for="postTitulo" class="text-danger"></span>
                 </div>
-                <div class="form-check col-auto">
-                    <input asp-for="postStatus" type="radio" name="postStatus" value="1" class="form-check-input" required />
-                    <label class="form-check-label" for="postStatus">Público</label>
+
+                <div class="form-group mb-3">
+                    <label asp-for="postDesc" class="form-label">Descrição</label>
+                    <textarea asp-for="postDesc" class="form-control" style="border-radius: 10px;"></textarea>
+                    <span asp-validation-for="postDesc" class="text-danger"></span>
                 </div>
-                <span asp-validation-for="postStatus" class="text-danger"></span>
+
+                <div class="form-group mb-3">
+                    <label asp-for="postStatus" class="form-label">Status</label>
+                    <div class="form-check">
+                        <input asp-for="postStatus" type="radio" name="postStatus" value="0" class="form-check-input" required />
+                        <label class="form-check-label" for="postStatus">Privado</label>
+                    </div>
+                    <div class="form-check">
+                        <input asp-for="postStatus" type="radio" name="postStatus" value="1" class="form-check-input" required />
+                        <label class="form-check-label" for="postStatus">Público</label>
+                    </div>
+                    <span asp-validation-for="postStatus" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="postCor" class="form-label">Cor</label>
+                    <input asp-for="postCor" type="color" class="form-control form-control-color" style="width: 50px; height: 50px;" required />
+                    <span asp-validation-for="postCor" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a asp-action="HomePost" class="btn btn-outline-secondary w-50 me-2">Voltar</a>
+                    <input type="submit" value="Postar" class="btn btn-primary w-50 ms-2" />
+                </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="postCor" class="control-label">Cor</label>
-                <input asp-for="postCor" type="color" class="form-control" style="width: 50px; height: 50px;" required />
-                <span asp-validation-for="postCor" class="text-danger"></span>
-            </div>
+            <div class="col-lg-5 d-flex flex-column justify-content-center align-items-center">
+                <img class="mb-4 w-75 img-thumbnail" id="selectedImage" src=@Url.Content("~/imgSistema/imagemAdd.png") alt="example placeholder" style="object-fit: contain;border-radius: 30px" />
 
-            <div class="form-group d-flex justify-content-between mt-4">
-                <a asp-action="HomePost" class="btn btn-outline-secondary w-50 me-2">Voltar</a>
-                <input type="submit" value="Postar" class="btn btn-primary w-50 ms-2" />
+                <div class="btn btn-primary btn-rounded position-relative overflow-hidden">
+                    <label class="form-label text-white mb-0">Adicionar Imagem</label>
+                    <input asp-for="postArquivo" type="file" class="form-control position-absolute top-0 start-0 w-100 h-100 opacity-0" onchange="displaySelectedImage(event, 'selectedImage')" />
+                </div>
+                <span asp-validation-for="postArquivo" class="text-danger mt-2"></span>
             </div>
         </div>
-
-        <div class="col-5 d-flex flex-column justify-content-center align-items-center">
-            <img class="mb-4 w-75" id="selectedImage" src=@Url.Content("~/imgSistema/imagemAdd.png") alt="example placeholder" style="object-fit: contain; border-radius: 30px" />
-
-            <div data-mdb-ripple-init class="btn btn-primary btn-rounded">
-                <label class="form-label text-white m-1" for="customFile1">Adicionar imagem</label>
-                <input asp-for="postArquivo" type="file" class="form-control d-none" id="customFile1" onchange="displaySelectedImage(event, 'selectedImage')" />
-                
-            </div>
-            <span asp-validation-for="postArquivo" class="text-danger"></span>
-        </div>
-    </div>
-</form>
+    </form>
+</div>
 
 @section Scripts {
     @{

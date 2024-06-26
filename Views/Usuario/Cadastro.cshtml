@@ -11,10 +11,10 @@
         <h1 class="text-center">NexHub</h1>
         <h3 class="text-center">Cadastro</h3>
 
-        @if (TempData["Mensagem"] != null)
+        @if (TempData["MensagemErro"] != null)
         {
             <div class="alert alert-danger" role="alert">
-                @Html.Raw(TempData["Mensagem"])
+                @Html.Raw(TempData["MensagemErro"])
             </div>
         }
 

@@ -25,10 +25,9 @@ namespace projetoRedeSocial.Controllers
 
         public ActionResult Login()
         {
-
-            DeleteCookieContext deleteCookie = ViewBag.usuarioId;
-
-
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Session.Clear();
+            Response.Cookies.Delete(".AspNetCore.Cookies");
             return View();
         }
 
@@ -44,10 +43,10 @@ namespace projetoRedeSocial.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if(ViewBag.usuarioId != null)
+                    if (ViewBag.UserId != null)
                     {
-                        Console.WriteLine(ViewBag.usuarioId);
-                        ViewBag.usuarioId = null;
+                        Console.WriteLine(ViewBag.UserId);
+                        ViewBag.UserId = null;
                     }
 
                     var user = _context.usuario
@@ -75,7 +74,6 @@ namespace projetoRedeSocial.Controllers
             }
         }
 
-
         [HttpPost]
         public ActionResult Registrar(Usuario usuario)
         {
@@ -92,6 +90,7 @@ namespace projetoRedeSocial.Controllers
 
                     _context.Add(usuario);
                     _context.SaveChanges();
+                    TempData["MensagemSucesso"] = "Cadastro realizado com sucesso! Faça login para continuar.";
                     return RedirectToAction("Login");
                 }
 
@@ -158,6 +157,8 @@ namespace projetoRedeSocial.Controllers
         // GET: Usuario/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
+
             if (id == null || _context.usuario == null)
             {
                 return NotFound();
@@ -166,6 +167,7 @@ namespace projetoRedeSocial.Controllers
             ViewBag.UsuarioId = valor;
 
             Seguidores? seguidores = _context.seguidores.FirstOrDefault(s => s.idUsuario == id && s.idUsuarioSeguidor == valor);
+
             ViewBag.Seguidor = seguidores != null;
 
             ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
@@ -176,11 +178,27 @@ namespace projetoRedeSocial.Controllers
                 return NotFound();
             }
 
-            var seguidoresIds = _context.seguidores.Where(s => s.idUsuarioSeguidor == id).Select(s => s.idUsuario).ToList();
-            var seguidoresUsuarios = _context.usuario.Where(u => seguidoresIds.Contains(u.usuarioId)).ToList();
-            ViewData["Seguidores"] = seguidoresUsuarios;
+            var seguindoIds = _context.seguidores
+                .Where(s => s.idUsuarioSeguidor == id)
+                .Select(s => s.idUsuario)
+                .ToList();
+            var seguindoUsuarios = _context.usuario
+                .Where(u => seguindoIds.Contains(u.usuarioId))
+                .ToList();
+            ViewData["Seguindo"] = seguindoUsuarios;
+
+
+            var seguidorIds = _context.seguidores
+                .Where(s => s.idUsuario == id)
+                .Select(s => s.idUsuarioSeguidor)
+                .ToList();
+            var seguidorUsuarios = _context.usuario
+                .Where(u => seguidorIds.Contains(u.usuarioId))
+                .ToList();
+            ViewData["Seguidores"] = seguidorUsuarios;
 
             return View(usuario);
+
         }
 
 
@@ -192,28 +210,42 @@ namespace projetoRedeSocial.Controllers
             if (valor == id)
             {
 
-            if (id == null || _context.usuario == null)
-            {
-                return NotFound();
-            }
-            ViewBag.UsuarioId = valor;
-            Seguidores? seguidores = _context.seguidores.FirstOrDefault(s => s.idUsuario == id && s.idUsuarioSeguidor == valor);
+                if (id == null || _context.usuario == null)
+                {
+                    return NotFound();
+                }
+                ViewBag.UsuarioId = valor;
+                Seguidores? seguidores = _context.seguidores.FirstOrDefault(s => s.idUsuario == id && s.idUsuarioSeguidor == valor);
 
                 ViewBag.Seguidor = seguidores != null;
 
                 ViewData["Posts"] = _context.post.Where(p => p.usuarioId == id).ToList();
 
                 var usuario = await _context.usuario.FirstOrDefaultAsync(m => m.usuarioId == id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
+                if (usuario == null)
+                {
+                    return NotFound();
+                }
 
-            var seguidoresIds = _context.seguidores.Where(s => s.idUsuarioSeguidor == id).Select(s => s.idUsuario).ToList();
-            var seguidoresUsuarios = _context.usuario.Where(u => seguidoresIds.Contains(u.usuarioId)).ToList();
-            ViewData["Seguidores"] = seguidoresUsuarios;
+                var seguindoIds = _context.seguidores
+                    .Where(s => s.idUsuarioSeguidor == id)
+                    .Select(s => s.idUsuario)
+                    .ToList();
+                var seguindoUsuarios = _context.usuario
+                    .Where(u => seguindoIds.Contains(u.usuarioId))
+                    .ToList();
+                ViewData["Seguindo"] = seguindoUsuarios;
 
-            return View(usuario);
+                var seguidorIds = _context.seguidores
+                    .Where(s => s.idUsuario == id)
+                    .Select(s => s.idUsuarioSeguidor)
+                    .ToList();
+                var seguidorUsuarios = _context.usuario
+                    .Where(u => seguidorIds.Contains(u.usuarioId))
+                    .ToList();
+                ViewData["Seguidores"] = seguidorUsuarios;
+
+                return View(usuario);
 
             }
             else
@@ -378,7 +410,7 @@ namespace projetoRedeSocial.Controllers
 
         private bool UsuarioExists(int id)
         {
-          return (_context.usuario?.Any(e => e.usuarioId == id)).GetValueOrDefault();
+            return (_context.usuario?.Any(e => e.usuarioId == id)).GetValueOrDefault();
         }
     }
 }

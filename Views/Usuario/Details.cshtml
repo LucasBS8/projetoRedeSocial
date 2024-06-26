@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Details";
 
-    // Método simples de formatação de telefone
+
     string FormatPhone(string phone)
     {
         if (string.IsNullOrWhiteSpace(phone)) return string.Empty;
@@ -16,28 +16,26 @@
         {
             return $"({phone.Substring(0, 2)}) {phone.Substring(2, 5)}-{phone.Substring(7, 4)}";
         }
-        return phone; // Retorna como está se não atender aos formatos acima
+        return phone;
     }
 }
 
 <div class="row align-items-center justify-content-between">
-    <div class="col-auto">
-        <div class="col-auto align-content-center">
-            @if (Model.usuarioImagem != null)
-            {
-                <img src="@Url.Content(Model.usuarioImagem)" class="rounded-circle" style="width: 80px; height: 80px; object-fit: fill;" />
-            }
-            else
-            {
-                <i class="bi bi-person-circle post-img rounded-circle fs-1" style="object-fit: cover; color:white"></i>
-            }
-        </div>
-    </div>
+    <div class="col-auto d-flex align-items-center">
+        @if (Model.usuarioImagem != null)
+        {
+            <img src="@Url.Content(Model.usuarioImagem)" class="rounded-circle" style="width: 80px; height: 80px; object-fit: fill;" />
+        }
+        else
+        {
+            <i class="h1 bi bi-person-circle display-1" style="color:white"></i>
+        }
 
-    <div class="col align-items-center text-light">
-        <h1>@Model.usuarioNome</h1>
-        <h4>Telefone: @FormatPhone(Model.usuarioTelefone)</h4>
-        <h4>E-mail: @Model.usuarioEmail</h4>
+        <div class="text-light ms-3">
+            <h1>@Model.usuarioNome</h1>
+            <h4>Telefone: @FormatPhone(Model.usuarioTelefone)</h4>
+            <h4>E-mail: @Model.usuarioEmail</h4>
+        </div>
     </div>
 
     @if (ViewBag.Seguidor)
@@ -67,7 +65,10 @@
         <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Posts</button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Seguidores</button>
+        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Seguindo</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-desc-tab" data-bs-toggle="pill" data-bs-target="#pills-seguidor" type="button" role="tab" aria-controls="pills-desc" aria-selected="false">Seguidores</button>
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="pills-desc-tab" data-bs-toggle="pill" data-bs-target="#pills-desc" type="button" role="tab" aria-controls="pills-desc" aria-selected="false">Descrição</button>
@@ -77,63 +78,165 @@
 <div class="tab-content" id="pills-tabContent">
     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
         <div class="row">
-            @foreach (var post in ViewBag.Posts)
+            @if (ViewBag.Posts != null)
             {
-                @if (post.postStatus == "1")
+                @foreach (var post in ViewBag.Posts)
                 {
+                    @if (post.postStatus == "1")
+                    {
 
-                @if (post.usuarioId == Model.usuarioId)
-                {
-                    <div class="col-auto">
-                        <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.postId">
-                            <div class="post-card" style="background-color: @post.postCor">
-                                @if (!string.IsNullOrEmpty(post.postArquivo))
-                                {
-                                    if (!post.postArquivo.Contains(".mp4"))
-                                    {
-                                        <img src="@Url.Content(post.postArquivo)" class="rounded-img" />
-                                    }
-                                    else
-                                    {
-                                        <video src="@Url.Content(post.postArquivo)" class="rounded-video">
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    }
-                                }
-                                else
-                                {
-                                    <div class="post-title">@post.postTitulo</div>
-                                    <div class="post-desc">@post.postDesc</div>
-                                }
+                        @if (post.usuarioId == Model.usuarioId)
+                        {
+                            <div class="col-auto">
+                                <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.postId">
+                                    <div class="post-card" style="background-color: @post.postCor">
+                                        @if (!string.IsNullOrEmpty(post.postArquivo))
+                                        {
+                                            if (!post.postArquivo.Contains(".mp4"))
+                                            {
+                                                <img src="@Url.Content(post.postArquivo)" class="rounded-img" />
+                                            }
+                                            else
+                                            {
+                                                <video src="@Url.Content(post.postArquivo)" class="rounded-video">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div class="post-title">@post.postTitulo</div>
+                                            <div class="post-desc">@post.postDesc</div>
+                                        }
+                                    </div>
+                                </a>
                             </div>
-                        </a>
-                    </div>
+                        }
+                    }
                 }
-                }
+            }
+            else
+            {
+                <div class="d-flex justify-content-center p-4">
+                    <h4>Esse usuário não fez nenhum post</h4>
+                </div>
             }
         </div>
     </div>
 
-    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-        @foreach (var usuario in ViewData["Seguidores"] as List<projetoRedeSocial.Models.Usuario>)
+    <div class="tab-pane fade" id="pills-seguidor" role="tabpanel" aria-labelledby="pills-profile-tab">
+        @if (ViewData["Seguidores"] != null)
         {
-            <div class="d-flex flex-column">
-                <a asp-controller="Usuario" asp-action="Details" asp-route-id="@usuario.usuarioId" class="d-flex align-items-center justify-content-between link-offset-2 link-underline link-underline-opacity-0 py-2">
-                    <div class="align-items-center">
-                        @if (usuario.usuarioImagem != null)
-                        {
-                            <img src="@Url.Content(usuario.usuarioImagem)" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
-                        }
-                        else
-                        {
-                            <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
-                        }
-                        <span class="fs-4 ms-3 text-white">@usuario.usuarioNome</span>
+
+            @foreach (var usuario in ViewData["Seguidores"] as List<projetoRedeSocial.Models.Usuario>)
+            {
+                @if (usuario.usuarioId == Convert.ToInt64(ViewBag.userId))
+                {
+                    <div class="d-flex flex-column">
+                        <a asp-controller="Usuario" asp-action="Details" asp-route-id="@usuario.usuarioId" class="d-flex align-items-center justify-content-between link-offset-2 link-underline link-underline-opacity-0 py-2">
+                            <div class="align-items-center">
+                                @if (usuario.usuarioImagem != null)
+                                {
+                                    <img src="@Url.Content(usuario.usuarioImagem)" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                                }
+                                else
+                                {
+                                    <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
+                                }
+                                <span class="fs-4 ms-3 text-white">@usuario.usuarioNome</span>
+                            </div>
+                            <i class="bi bi-arrow-right text-white display-6"></i>
+                        </a>
+                        <hr class="my-2" />
                     </div>
-                    <i class="bi bi-arrow-right text-white display-6"></i>
-                </a>
-                <hr class="my-2" />
+                }
+                else
+                {
+                    <div class="d-flex flex-column">
+                        <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@usuario.usuarioId" class="d-flex align-items-center justify-content-between link-offset-2 link-underline link-underline-opacity-0 py-2">
+                            <div class="align-items-center">
+                                @if (usuario.usuarioImagem != null)
+                                {
+                                    <img src="@Url.Content(usuario.usuarioImagem)" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                                }
+                                else
+                                {
+                                    <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
+                                }
+                                <span class="fs-4 ms-3 text-white">@usuario.usuarioNome</span>
+                            </div>
+                            <i class="bi bi-arrow-right text-white display-6"></i>
+                        </a>
+                        <hr class="my-2" />
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            <div class="d-flex justify-content-center p-4">
+                <h4>Ninguém está seguindo esse usuário</h4>
             </div>
         }
     </div>
 
+
+
+    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+        @if (ViewData["Seguindo"] != null)
+        {
+            @foreach (var usuario in ViewData["Seguindo"] as List<projetoRedeSocial.Models.Usuario>)
+            {
+                @if (usuario.usuarioId == Convert.ToInt64(ViewBag.userId))
+                {
+
+                    <div class="d-flex flex-column">
+                        <a asp-controller="Usuario" asp-action="Details" asp-route-id="@usuario.usuarioId" class="d-flex align-items-center justify-content-between link-offset-2 link-underline link-underline-opacity-0 py-2">
+                            <div class="align-items-center">
+                                @if (usuario.usuarioImagem != null)
+                                {
+                                    <img src="@Url.Content(usuario.usuarioImagem)" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                                }
+                                else
+                                {
+                                    <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
+                                }
+                                <span class="fs-4 ms-3 text-white">@usuario.usuarioNome</span>
+                            </div>
+                            <i class="bi bi-arrow-right text-white display-6"></i>
+                        </a>
+                        <hr class="my-2" />
+                    </div>
+                }
+                else
+                {
+
+                    <div class="d-flex flex-column">
+                        <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@usuario.usuarioId" class="d-flex align-items-center justify-content-between link-offset-2 link-underline link-underline-opacity-0 py-2">
+                            <div class="align-items-center">
+                                @if (usuario.usuarioImagem != null)
+                                {
+                                    <img src="@Url.Content(usuario.usuarioImagem)" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                                }
+                                else
+                                {
+                                    <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
+                                }
+                                <span class="fs-4 ms-3 text-white">@usuario.usuarioNome</span>
+                            </div>
+                            <i class="bi bi-arrow-right text-white display-6"></i>
+                        </a>
+                        <hr class="my-2" />
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            <div class="d-flex justify-content-center p-4">
+                <h4>Esse usuário não está seguindo ninguém</h4>
+            </div>
+        }
+    </div>
+
+</div>

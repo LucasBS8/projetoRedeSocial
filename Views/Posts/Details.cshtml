@@ -4,193 +4,178 @@
     ViewData["Title"] = "Details";
 }
 
-<div class="row align-items-center text-white ">
-    <div class="col d-fle row align-items-center ">
-        @if (ViewBag.userId == Model.usuarioPost?.usuarioId)
-        {
-            <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@Model.usuarioPost?.usuarioId" class=" link-underline link-underline-opacity-0 text-white">
-                @if (Model.usuarioPost?.usuarioImagem != null)
-                {
-                    <img src="@Url.Content(Model.usuarioPost.usuarioImagem)" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" />
-                }
-                else
-                {
-                    <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
-                }
-                <span class="fs-4 ms-3 d-none d-sm-inline h1">@Model.usuarioPost?.usuarioNome</span>
-            </a>
-        }
-        else
-        {
-            <a asp-controller="Usuario" asp-action="Details" asp-route-id="@Model.usuarioPost?.usuarioId">
-                @if (Model.usuarioPost?.usuarioImagem != null)
-                {
-                    <img src="@Url.Content(Model.usuarioPost.usuarioImagem)" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" />
-                }
-                else
-                {
-                    <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
-                }
-                <span class="fs-4 ms-3 d-none d-sm-inline text-white h1">@Model.usuarioPost?.usuarioNome</span>
-            </a>
-        }
-    </div>
-
-    <div class="col d-flex align-items-center justify-content-end">
-        @if (ViewBag.userId == Model.usuarioPost?.usuarioId)
-        {
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-gear"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                    <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.postId">Editar</a></li>
-                    <li>
-                        <form asp-action="Delete" method="post" style="display:inline;">
-                            <input type="hidden" name="id" value="@Model.postId" />
-                            <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Excluir</button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
-        }
-
-        @if (ViewBag.Curtida)
-        {
-            <form asp-controller="Posts" asp-action="Neutro" method="post" style="display:inline;">
-                <input type="hidden" name="id" value="@Model.postId" />
-                <button type="submit" class="btn btn-primary" style="border-radius:100%"><i class="bi bi-hand-thumbs-up-fill"></i></button>
-            </form>
-        }
-        else
-        {
-            <form asp-controller="Posts" asp-action="Curtir" method="post" style="display:inline;">
-                <input type="hidden" name="id" value="@Model.postId" />
-                <button type="submit" class="btn btn-info" style="border-radius:100%"><i class="bi bi-dash-circle"></i></button>
-            </form>
-        }
-        <span class="ms-3">@ViewBag.CurtidasCount Curtidas</span>
-    </div>
-</div>
-
-@if (!string.IsNullOrEmpty(Model.postArquivo))
-{
-    <div class=" row d-flex justify-content-lg-around align-items-center ">
-        <hr />
-        <div class="col-5 d-flex justify-content-center flex-column text-center" style="max-width:800px">
-            <p class="h3">@Html.DisplayFor(model => model.postTitulo)</p>
-            <textarea class="h4 form-control bg-dark text-white" disabled style="height:500px">
-                @Html.DisplayFor(model => model.postDesc)
-                        </textarea>
-        </div>
-        <div class="col-5 ">
-
-            @if (!Model.postArquivo.Contains(".mp4"))
+<div class="container mt-5">
+    <div class="row align-items-center text-white mb-4">
+        <div class="col d-flex align-items-center">
+            @if (ViewBag.userId == Model.usuarioPost?.usuarioId)
             {
-                <img src="@Url.Content(Model.postArquivo)" class="post-img" style="object-fit:cover" />
+                <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@Model.usuarioPost?.usuarioId" class="link-underline link-underline-opacity-0 text-white">
+                    @if (Model.usuarioPost?.usuarioImagem != null)
+                    {
+                        <img src="@Url.Content(Model.usuarioPost.usuarioImagem)" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
+                    }
+                    <span class="fs-4 ms-3 d-none d-sm-inline h1">@Model.usuarioPost?.usuarioNome</span>
+                </a>
             }
             else
             {
-                <video src="@Url.Content(Model.postArquivo)" class="post-img" style="object-fit:cover">
-                    Your browser does not support the video tag.
-                </video>
+                <a asp-controller="Usuario" asp-action="Details" asp-route-id="@Model.usuarioPost?.usuarioId">
+                    @if (Model.usuarioPost?.usuarioImagem != null)
+                    {
+                        <img src="@Url.Content(Model.usuarioPost.usuarioImagem)" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <i class="fs-1 bi bi-person-circle img-fluid rounded-img" style="color:white"></i>
+                    }
+                    <span class="fs-4 ms-3 d-none d-sm-inline text-white h1">@Model.usuarioPost?.usuarioNome</span>
+                </a>
+            }
+        </div>
+
+        <div class="col d-flex align-items-center justify-content-end">
+            @if (ViewBag.userId == Model.usuarioPost?.usuarioId)
+            {
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-gear"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.postId">Editar</a></li>
+                        <li>
+                            <form asp-action="Delete" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="@Model.postId" />
+                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Excluir</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             }
 
+            @if (ViewBag.Curtida)
+            {
+                <form asp-controller="Posts" asp-action="Neutro" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@Model.postId" />
+                    <button type="submit" class="btn btn-primary rounded-circle"><i class="bi bi-hand-thumbs-up-fill"></i></button>
+                </form>
+            }
+            else
+            {
+                <form asp-controller="Posts" asp-action="Curtir" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@Model.postId" />
+                    <button type="submit" class="btn btn-info rounded-circle"><i class="bi bi-hand-thumbs-up"></i></button>
+                </form>
+            }
+            <span class="ms-3">@ViewBag.CurtidasCount Curtidas</span>
         </div>
     </div>
-    <hr />
-}
-else
-{
-    <div class=" row d-flex justify-content-lg-around align-items-center text-white">
-        <hr />
-        <div class="col-10 d-flex justify-content-center flex-column text-center ">
-            <p class="h3">@Html.DisplayFor(model => model.postTitulo)</p>
-            <textarea class="h4 form-control bg-dark text-white" disabled style="height:500px">
-                @Html.DisplayFor(model => model.postDesc)
-                    </textarea>
-        </div>
-    </div>
-    <hr />
-}
 
-<form asp-action="AdicionarComentario" method="post">
-    <input type="hidden" name="postId" value="@Model.postId" />
-
-    <div class="form-group">
-        <label for="comentario">Adicionar Comentário:</label>
-        <textarea class="form-control" id="comentario" name="comentario" rows="3"></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Enviar Comentário</button>
-</form>
-
-@if (ViewData["Comentarios"] != null && ((List<Comentarios>)ViewData["Comentarios"]).Any())
-{
-    <hr />
-    <h4>Comentários:</h4>
-    @foreach (var comentario in (List<Comentarios>)ViewData["Comentarios"])
+    @if (!string.IsNullOrEmpty(Model.postArquivo))
     {
-        <div class="card bg-dark text-white">
-            <div class="card-body">
-                <h5 class="card-title">@comentario.usuarioComentario.usuarioNome</h5>
-                <p class="card-text">@comentario.comentario</p>
-                @if (ViewBag.userId == Model.usuarioPost?.usuarioId || ViewBag.userId == comentario.usuarioId)
+        <div class="row d-flex justify-content-lg-around align-items-center mb-4">
+            <hr />
+            <div class="col-lg-6 text-center mb-3">
+                <h3>@Html.DisplayFor(model => model.postTitulo)</h3>
+                <textarea class="form-control bg-dark text-white" disabled style="height:200px">@Html.DisplayFor(model => model.postDesc)</textarea>
+            </div>
+            <div class="col-lg-6 text-center">
+                @if (!Model.postArquivo.Contains(".mp4"))
                 {
-
-
-                    <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteComentario">Excluir Comentário</button>
-
-
-
+                    <img src="@Url.Content(Model.postArquivo)" class="img-fluid rounded" style="max-height: 400px; object-fit: cover;" />
                 }
-                @{
-                    Console.WriteLine("-----------------------------------------------------------------------");
-                    Console.WriteLine(ViewBag.userId);
-                    Console.WriteLine(Model.usuarioPost.usuarioId);
+                else
+                {
+                    <video src="@Url.Content(Model.postArquivo)" class="img-fluid rounded" style="max-height: 400px; object-fit: cover;" controls>
+                        Your browser does not support the video tag.
+                    </video>
                 }
             </div>
         </div>
-        <div class="modal fade " id="confirmDeleteComentario" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog bg-dark " style="border-radius:20px">
-                <div class="modal-content  bg-dark " style="border-radius:20px">
-                    <div class="modal-header  bg-dark" style="border-top-left-radius: 20px; border-top-right-radius: 20px">
-                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
-                    </div>
-                    <div class="modal-body">
-                        Tem certeza de que deseja excluir esse comentário? Esta ação não pode ser desfeita.
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <form asp-controller="Posts" asp-action="ExcluirComentario" method="post" style="display:inline;">
-                            <input type="hidden" name="comentarioId" value="@comentario.comentarioId" />
-                            <input type="hidden" name="postId" value="@Model.postId" />
-                            <button type="submit" class="btn btn-danger">Excluir Comentário</button>
-                        </form>
+        <hr />
+    }
+    else
+    {
+        <div class="row d-flex justify-content-lg-around align-items-center text-white mb-4">
+            <hr />
+            <div class="col-12 text-center">
+                <h3>@Html.DisplayFor(model => model.postTitulo)</h3>
+                <textarea class="form-control bg-dark text-white" disabled style="height:200px">@Html.DisplayFor(model => model.postDesc)</textarea>
+            </div>
+        </div>
+        <hr />
+    }
+
+    <form asp-action="AdicionarComentario" method="post" class="mb-4">
+        <input type="hidden" name="postId" value="@Model.postId" />
+        <div class="form-group">
+            <label for="comentario">Adicionar Comentário:</label>
+            <textarea class="form-control" id="comentario" name="comentario" rows="3" maxlength="200"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Enviar Comentário</button>
+    </form>
+
+    @if (ViewData["Comentarios"] != null && ((List<Comentarios>)ViewData["Comentarios"]).Any())
+    {
+        <hr />
+        <h4>Comentários:</h4>
+        @foreach (var comentario in (List<Comentarios>)ViewData["Comentarios"])
+        {
+            <div class="card bg-dark text-white mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">@comentario.usuarioComentario.usuarioNome</h5>
+                    <p class="card-text">@comentario.comentario</p>
+                    @if (ViewBag.userId == Model.usuarioPost?.usuarioId || ViewBag.userId == comentario.usuarioId)
+                    {
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteComentario">Excluir Comentário</button>
+                    }
+                </div>
+            </div>
+
+            <div class="modal fade" id="confirmDeleteComentario" tabindex="-1" aria-labelledby="confirmDeleteComentarioLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmDeleteComentarioLabel">Confirmar Exclusão</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Tem certeza de que deseja excluir esse comentário? Esta ação não pode ser desfeita.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <form asp-controller="Posts" asp-action="ExcluirComentario" method="post" style="display:inline;">
+                                <input type="hidden" name="comentarioId" value="@comentario.comentarioId" />
+                                <input type="hidden" name="postId" value="@Model.postId" />
+                                <button type="submit" class="btn btn-danger">Excluir Comentário</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
     }
-}
 
-
-
-<div class="modal fade " id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog bg-dark " style="border-radius:20px">
-        <div class="modal-content  bg-dark " style="border-radius:20px">
-            <div class="modal-header  bg-dark" style="border-top-left-radius: 20px; border-top-right-radius: 20px">
-                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
-            </div>
-            <div class="modal-body">
-                Tem certeza de que deseja excluir esse post? Esta ação não pode ser desfeita.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <form asp-action="Delete" method="post" style="display:inline;">
-                    <input type="hidden" name="id" value="@Model.postId" />
-                    <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Excluir</button>
-                </form>
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Tem certeza de que deseja excluir esse post? Esta ação não pode ser desfeita.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form asp-action="Delete" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@Model.postId" />
+                        <button type="submit" class="btn btn-danger">Excluir</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

@@ -24,7 +24,7 @@ namespace projetoRedeSocial.Models
         public string? postTitulo { get; set; }
 
         [Column("postDesc")]
-        [StringLength(200, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
+        [StringLength(600, ErrorMessage = "A {0} deve ter no máximo {1} caracteres.")]
         [Display(Name = "Descrição")]
         public string? postDesc { get; set; }
 
