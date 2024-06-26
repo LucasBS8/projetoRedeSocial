@@ -87,27 +87,50 @@
 
                         @if (post.usuarioId == Model.usuarioId)
                         {
+
                             <div class="col-auto">
-                                <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.postId">
-                                    <div class="post-card" style="background-color: @post.postCor">
-                                        @if (!string.IsNullOrEmpty(post.postArquivo))
-                                        {
-                                            if (!post.postArquivo.Contains(".mp4"))
+                                <a asp-action="Details" asp-route-id="@post.postId">
+                                    <div class="position-relative" style="width: 390px; height: 220px; border-radius: 22px; background-color: @post.postCor;">
+                                        <div class="position-absolute top-0 bottom-0 start-0 end-0">
+                                            @if (!string.IsNullOrEmpty(post.postArquivo))
                                             {
-                                                <img src="@Url.Content(post.postArquivo)" class="rounded-img" />
+                                                if (!post.postArquivo.Contains(".mp4"))
+                                                {
+                                                    <img src="@Url.Content(post.postArquivo)" class="img-fluid rounded-3 h-100 w-100" style="object-fit: cover;" alt="Post Image" />
+                                                }
+                                                else
+                                                {
+                                                    <video src="@Url.Content(post.postArquivo)" class="img-fluid rounded-3 h-100 w-100" style="object-fit: cover;">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                }
                                             }
                                             else
                                             {
-                                                <video src="@Url.Content(post.postArquivo)" class="rounded-video">
-                                                    Your browser does not support the video tag.
-                                                </video>
+                                                <div class="text-white p-3">@((post.postDesc.Length > 100 ? post.postDesc.Substring(0, 100) + "..." : post.postDesc))</div>
                                             }
-                                        }
-                                        else
-                                        {
-                                            <div class="post-title">@post.postTitulo</div>
-                                            <div class="post-desc">@post.postDesc</div>
-                                        }
+                                        </div>
+
+                                        <div class="position-absolute bottom-0 w-100 bg-primary d-flex align-items-center p-3 rounded-bottom" style="height: 70px;">
+                                            <div class="flex-shrink-0">
+                                                @if (post.usuarioPost.usuarioImagem != null)
+                                                {
+                                                    <img src="@Url.Content(post.usuarioPost.usuarioImagem)" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;" />
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-person-circle display-4" style="color: white;"></i>
+                                                }
+                                            </div>
+                                            <div class="ms-2 text-white w-100 d-flex flex-column justify-content-center">
+                                                <h4 class="mb-0">@((post.postTitulo.Length > 30 ? post.postTitulo.Substring(0, 30) + "..." : post.postTitulo))</h4>
+                                                <div class="d-flex flex-row justify-content-between">
+                                                    <p class="mb-0 me-2">@((post.usuarioPost.usuarioNome.Length > 20 ? post.usuarioPost.usuarioNome.Substring(0, 20) + "..." : post.usuarioPost.usuarioNome))</p>
+                                                    <p class="mb-0">@post.postDate?.Substring(0, 10)</p>
+
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </a>
                             </div>
