@@ -94,6 +94,7 @@ namespace projetoRedeSocial.Controllers
             ViewBag.CurtidasCount = _context.curtidas.Count(c => c.idPost == id);
 
             ViewData["Comentarios"] = comentarios;
+            ViewBag.ComentarioError = TempData["ComentarioError"];
             return View(post);
         }
 
@@ -108,6 +109,14 @@ namespace projetoRedeSocial.Controllers
             {
                 return NotFound();
             }
+
+            // Verificação de comentário vazio
+            if (string.IsNullOrWhiteSpace(comentario))
+            {
+                TempData["ComentarioError"] = "Comentário não pode estar vazio.";
+                return RedirectToAction("Details", new { id = postId });
+            }
+
             var novoComentario = new Comentarios
             {
                 usuarioId = int.Parse(ViewBag.userId),
@@ -117,8 +126,9 @@ namespace projetoRedeSocial.Controllers
             };
             _context.comentarios.Add(novoComentario);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "Posts", new { id = postId });
+            return RedirectToAction("Details", new { id = postId });
         }
+
 
 
         // GET: Posts/Create

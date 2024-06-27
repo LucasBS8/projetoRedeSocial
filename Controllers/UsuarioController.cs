@@ -94,7 +94,7 @@ namespace projetoRedeSocial.Controllers
                     var existingUser = _context.usuario.FirstOrDefault(u => u.usuarioEmail == usuario.usuarioEmail);
                     if (existingUser != null)
                     {
-                        TempData["Mensagem"] = "Este endereço de e-mail já está sendo usado por outro usuário.";
+                        TempData["MensagemErro"] = "Este endereço de e-mail já está sendo usado por outro usuário.";
                         return RedirectToAction("Cadastro", usuario);
                     }
 
@@ -104,27 +104,21 @@ namespace projetoRedeSocial.Controllers
                     return RedirectToAction("Login");
                 }
 
-                foreach (var state in ModelState.Values)
-                {
-                    foreach (var error in state.Errors)
-                    {
-                        TempData["Mensagem"] += error.ErrorMessage + "<br>";
-                    }
-                }
-
+                TempData["MensagemErro"] = string.Join("<br>", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
                 return RedirectToAction("Cadastro", usuario);
             }
             catch (DbUpdateException dbEx)
             {
-                TempData["Mensagem"] = "Erro: " + dbEx.Message;
+                TempData["MensagemErro"] = "Erro no banco de dados: " + dbEx.Message;
                 return RedirectToAction("Cadastro", usuario);
             }
             catch (Exception ex)
             {
-                TempData["Mensagem"] = "Erro: " + ex.Message;
+                TempData["MensagemErro"] = "Erro: " + ex.Message;
                 return RedirectToAction("Cadastro", usuario);
             }
         }
+
 
         [HttpPost]
         public IActionResult Seguir(int id)

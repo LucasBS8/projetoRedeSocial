@@ -17,14 +17,25 @@
                 @Html.Raw(TempData["MensagemErro"])
             </div>
         }
+        @if (TempData["MensagemSucesso"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @Html.Raw(TempData["MensagemSucesso"])
+            </div>
+        }
 
         <div class="mb-3">
             <label class="form-label pt-3">Nome</label>
             <input asp-for="usuarioNome" type="text" class="form-control" placeholder="Nome">
+            <span asp-validation-for="usuarioNome" class="text-danger"></span>
+
             <label class="form-label pt-3">Email</label>
             <input asp-for="usuarioEmail" type="email" class="form-control" placeholder="nome@exemplo.com">
+            <span asp-validation-for="usuarioEmail" class="text-danger"></span>
+
             <label class="form-label pt-3">Senha</label>
             <input asp-for="usuarioSenha" type="password" class="form-control" placeholder="senha">
+            <span asp-validation-for="usuarioSenha" class="text-danger"></span>
         </div>
         <div class="d-grid gap-2 text-center p-4 d-flex justify-content-center">
             <button type="submit" class="btn btn-primary w-75">Cadastrar</button>
@@ -34,3 +45,9 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

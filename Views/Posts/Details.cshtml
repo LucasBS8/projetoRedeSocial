@@ -109,14 +109,17 @@
         <hr />
     }
 
-    <form asp-action="AdicionarComentario" method="post" class="mb-4">
+    <form asp-action="AdicionarComentario" method="post" class="mb-4" id="comentarioForm">
         <input type="hidden" name="postId" value="@Model.postId" />
         <div class="form-group">
             <label for="comentario">Adicionar Comentário:</label>
-            <textarea class="form-control" id="comentario" name="comentario" rows="3" maxlength="200"></textarea>
+            <textarea class="form-control" id="comentario" name="comentario" rows="3" maxlength="200" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary mt-2">Enviar Comentário</button>
+        <div class="text-danger mt-2" id="comentarioError" style="display: none;">Comentário não pode estar vazio.</div>
     </form>
+
+
 
     @if (ViewData["Comentarios"] != null && ((List<Comentarios>)ViewData["Comentarios"]).Any())
     {
@@ -137,7 +140,7 @@
 
             <div class="modal fade" id="confirmDeleteComentario" tabindex="-1" aria-labelledby="confirmDeleteComentarioLabel" aria-hidden="true">
                 <div class="modal-dialog">
-                    <div class="modal-content">
+                    <div class="modal-content bg-dark">
                         <div class="modal-header">
                             <h5 class="modal-title" id="confirmDeleteComentarioLabel">Confirmar Exclusão</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -180,3 +183,14 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    document.getElementById("comentarioForm").addEventListener("submit", function (event) {
+        var comentario = document.getElementById("comentario").value.trim();
+        if (!comentario) {
+            event.preventDefault();
+            document.getElementById("comentarioError").style.display = "block";
+        }
+    });
+</script>
