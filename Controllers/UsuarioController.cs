@@ -87,7 +87,12 @@ namespace projetoRedeSocial.Controllers
         [HttpPost]
         public ActionResult Registrar(Usuario usuario)
         {
-            try
+            if (usuario.usuarioSenha == null)
+            {
+                TempData["MensagemErro"] = "A senha deve conter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas e pelo menos um número.";
+                return RedirectToAction("Cadastro", usuario);
+            }
+            else
             {
                 if (ModelState.IsValid)
                 {
@@ -98,6 +103,17 @@ namespace projetoRedeSocial.Controllers
                         return RedirectToAction("Cadastro", usuario);
                     }
 
+
+
+                    // Verificar se a senha atende aos requisitos
+                    if (!Regex.IsMatch(usuario.usuarioSenha, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"))
+                    {
+                        TempData["MensagemErro"] = "A senha deve conter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas e pelo menos um número.";
+                        return RedirectToAction("Cadastro", usuario);
+                    }
+
+
+
                     _context.Add(usuario);
                     _context.SaveChanges();
                     TempData["MensagemSucesso"] = "Cadastro realizado com sucesso! Faça login para continuar.";
@@ -107,17 +123,8 @@ namespace projetoRedeSocial.Controllers
                 TempData["MensagemErro"] = string.Join("<br>", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
                 return RedirectToAction("Cadastro", usuario);
             }
-            catch (DbUpdateException dbEx)
-            {
-                TempData["MensagemErro"] = "Erro no banco de dados: " + dbEx.Message;
-                return RedirectToAction("Cadastro", usuario);
-            }
-            catch (Exception ex)
-            {
-                TempData["MensagemErro"] = "Erro: " + ex.Message;
-                return RedirectToAction("Cadastro", usuario);
-            }
         }
+
 
 
         [HttpPost]
