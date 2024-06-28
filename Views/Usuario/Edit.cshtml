@@ -42,7 +42,7 @@
                 <div class="mb-3">
                     <label asp-for="usuarioTelefone" class="form-label"></label>
                     : *apenas número
-                    <input asp-for="usuarioTelefone" id="telefone" type="text" class="form-control" required />
+                    <input asp-for="usuarioTelefone" id="telefone" type="text" class="form-control"/>
                     <span asp-validation-for="usuarioTelefone" class="text-danger"></span>
                 </div>
 
@@ -56,7 +56,7 @@
                 <div class="mb-3">
                     <label asp-for="usuarioSenha" class="form-label"></label>
                     :
-                    <input asp-for="usuarioSenha" type="password" class="form-control" required />
+                    <input asp-for="usuarioSenha" class="form-control" required />
                     <span asp-validation-for="usuarioSenha" class="text-danger"></span>
                 </div>
 
@@ -82,8 +82,8 @@
                 </div>
 
                 <div class="text-center">
-                    <button type="submit" class="btn btn-success w-50">Salvar</button>
-                    <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@Model.usuarioId" class="btn btn-secondary w-50">Voltar</a>
+                    <button type="submit" class="btn btn-success w-25">Salvar</button>
+                    <a asp-controller="Usuario" asp-action="DetailsUser" asp-route-id="@Model.usuarioId" class="btn btn-secondary w-25">Voltar</a>
                 </div>
             </form>
         </div>

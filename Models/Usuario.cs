@@ -24,13 +24,14 @@ namespace projetoRedeSocial.Models
         public string? usuarioNome { get; set; }
 
         [StringLength(10, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
-        [RegularExpression(@"^(?=.*[0-9]).{10,}$", ErrorMessage = "Apenas devem ter números")]
+        [RegularExpression(@"^(?=.*[0-9]).{10,}$", ErrorMessage = "Telefone incorreto")]
         [Column("usuarioTelefone")]
         [Display(Name = "Telefone")]
         public string? usuarioTelefone { get; set; }
 
         [Column("usuarioEmail")]
         [Display(Name = "E-mail")]
+        [ValidarEmail("@gmail.com", ErrorMessage = "O e-mail deve terminar com @gmail.com")]
         public string? usuarioEmail { get; set; }
 
         [StringLength(20, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
@@ -46,7 +47,7 @@ namespace projetoRedeSocial.Models
         public string? usuarioEndereco { get; set; }
 
         [StringLength(11, ErrorMessage = "O {0} deve ter no máximo {1} caracteres.")]
-        [RegularExpression(@"^(?=.*[0-9]).{8,}$", ErrorMessage = "Apenas devem ter números")]
+        [RegularExpression(@"^(?=.*[0-9]).{8,}$", ErrorMessage = "Cpf incorreto")]
         [Column("usuarioCPF")]
         [Display(Name = "CPF")]
         public string? usuarioCPF { get; set; }

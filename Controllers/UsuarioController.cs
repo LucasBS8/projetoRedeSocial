@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using projetoRedeSocial.Models;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.IdentityModel.Tokens;
 
 namespace projetoRedeSocial.Controllers
 {
@@ -312,42 +313,41 @@ namespace projetoRedeSocial.Controllers
                 {
                     try
                     {
-                        if (usuarioImagem != null)
-                        {
-
-                            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".jfif" };
-                            var extension = Path.GetExtension(usuarioImagem.FileName).ToLower();
-                            if (!allowedExtensions.Contains(extension))
+                            if (usuarioImagem != null)
                             {
-                                ModelState.AddModelError("postArquivo", "Apenas arquivos (.jfif, .jpg, .jpeg, .png, .gif) são permitidos.");
-                                return View(usuario);
+                                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".jfif" };
+                                var extension = Path.GetExtension(usuarioImagem.FileName).ToLower();
+                                if (!allowedExtensions.Contains(extension))
+                                {
+                                    ModelState.AddModelError("postArquivo", "Apenas arquivos (.jfif, .jpg, .jpeg, .png, .gif) são permitidos.");
+                                    return View(usuario);
+                                }
+
+                                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                                var uniqueFileName = Guid.NewGuid().ToString() + "_" + usuarioImagem.FileName;
+                                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                                Directory.CreateDirectory(uploadsFolder);
+                                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                                {
+                                    await usuarioImagem.CopyToAsync(fileStream);
+                                }
+                                usuario.usuarioImagem = "/uploads/" + uniqueFileName;
                             }
 
-                            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-                            var uniqueFileName = Guid.NewGuid().ToString() + "_" + usuarioImagem.FileName;
-                            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                            Directory.CreateDirectory(uploadsFolder);
-                            using (var fileStream = new FileStream(filePath, FileMode.Create))
-                            {
-                                await usuarioImagem.CopyToAsync(fileStream);
-                            }
-                            usuario.usuarioImagem = "/uploads/" + uniqueFileName;
-                        }
-
-                        _context.Update(usuario);
-                        await _context.SaveChangesAsync();
+                            _context.Update(usuario);
+                            await _context.SaveChangesAsync();
                     }
                     catch (DbUpdateConcurrencyException ex)
                     {
 
                         TempData["Mensagem"] = "Erro ao salvar as alterações. Outro usuário pode ter modificado esses dados. Tente novamente.";
-                        return View(usuario);
+                        return RedirectToAction(nameof(Edit), new { id });
                     }
                     catch (Exception ex)
                     {
 
                         TempData["Mensagem"] = "Ocorreu um erro inesperado. Tente novamente mais tarde.";
-                        return View(usuario);
+                        return RedirectToAction(nameof(Edit), new { id });
                     }
                     return RedirectToAction("HomePost", "Posts");
                 }
@@ -359,7 +359,7 @@ namespace projetoRedeSocial.Controllers
                         TempData["Mensagem"] += error.ErrorMessage + "<br>";
                     }
                 }
-                return RedirectToAction(nameof(DetailsUser), new { id });
+                return RedirectToAction(nameof(Edit), new { id });
             }
             else
             {
